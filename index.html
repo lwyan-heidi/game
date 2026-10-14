@@ -8,11 +8,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* 防止 iOS/iPad 在畫布劃動時引發頁面拉伸與跳動 */
-        body {
+        html, body {
             touch-action: pan-y;
             overflow-x: hidden;
             -webkit-user-select: none;
             user-select: none;
+        }
+
+        /* 畫布容器與畫布手勢控制 */
+        .canvas-container {
+            touch-action: none !important;
+            -webkit-touch-callout: none;
         }
 
         /* 掃描動畫 (對稱軸) */
@@ -172,14 +178,14 @@
             <p class="text-slate-600 text-xs md:text-sm mb-3">親手劃下一筆，AI 將自動為你複製對稱圖案。畫錯可用橡皮擦或復原上一步！</p>
 
             <!-- Mode Selector & Tool Bar -->
-            <div class="flex flex-wrap items-center justify-between gap-2.5 mb-3 bg-slate-100 p-2.5 rounded-xl border border-slate-200">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3 bg-slate-100 p-2.5 rounded-xl border border-slate-200">
                 <!-- Mode Toggle -->
                 <div class="flex items-center gap-1 bg-white p-1 rounded-lg border shadow-sm">
                     <button id="btn-mode-1" onclick="setMode('1axis')" class="px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white">
                         1軸左右對稱
                     </button>
                     <button id="btn-mode-8" onclick="setMode('8axis')" class="px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100">
-                        8軸中心放射
+                        8折中心放射
                     </button>
                 </div>
 
@@ -189,7 +195,7 @@
                         ✏️ 畫筆
                     </button>
                     <button id="btn-tool-eraser" onclick="setTool('eraser')" class="px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100">
-                        🧽 鏡像橡皮擦
+                        🧽 橡皮擦
                     </button>
                 </div>
 
@@ -201,7 +207,7 @@
                     </div>
                     <div class="flex items-center gap-1">
                         <label class="text-xs font-bold text-slate-600">粗細:</label>
-                        <input type="range" id="brushSize" min="2" max="22" value="6" class="w-16 sm:w-20 accent-indigo-600">
+                        <input type="range" id="brushSize" min="2" max="24" value="6" class="w-16 sm:w-20 accent-indigo-600">
                     </div>
                 </div>
 
@@ -210,23 +216,23 @@
                         ↩️ 復原
                     </button>
                     <button onclick="clearCanvas()" class="px-2.5 py-1.5 text-xs font-bold bg-red-100 text-red-600 hover:bg-red-200 rounded-lg transition">
-                        🗑️ 清除
+                        🗑️ 清除畫板
                     </button>
                 </div>
             </div>
 
-            <!-- Canvas Container -->
-            <div class="relative w-full max-w-[500px] h-[380px] sm:h-[400px] mx-auto bg-slate-900 rounded-xl overflow-hidden border-4 border-slate-800 shadow-xl touch-none select-none">
-                <canvas id="mirrorCanvas" width="500" height="400" class="absolute inset-0 z-10 cursor-crosshair touch-none"></canvas>
-                <!-- SVG Grid Overlay -->
-                <svg id="canvasGrid" class="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 500 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                    <line id="grid1Axis" x1="250" y1="0" x2="250" y2="400" stroke="#ef4444" stroke-dasharray="6 6" stroke-width="2"/>
+            <!-- Canvas Container (STRICT 1:1 SQUARE ASPECT RATIO TO PREVENT DISTORTION) -->
+            <div class="canvas-container relative w-full max-w-[480px] aspect-square mx-auto bg-slate-900 rounded-xl overflow-hidden border-4 border-slate-800 shadow-xl select-none" style="touch-action: none;">
+                <canvas id="mirrorCanvas" width="500" height="500" class="absolute inset-0 w-full h-full z-10 cursor-crosshair" style="touch-action: none;"></canvas>
+                <!-- SVG Grid Overlay (Matching 500x500 Square) -->
+                <svg id="canvasGrid" class="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 500 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                    <line id="grid1Axis" x1="250" y1="0" x2="250" y2="500" stroke="#ef4444" stroke-dasharray="6 6" stroke-width="2"/>
                     <g id="grid8Axis" class="hidden">
-                        <line x1="0" y1="200" x2="500" y2="200" class="grid-line" />
-                        <line x1="250" y1="0" x2="250" y2="400" class="grid-line" />
-                        <line x1="0" y1="0" x2="500" y2="400" class="grid-line" />
-                        <line x1="0" y1="400" x2="500" y2="0" class="grid-line" />
-                        <circle cx="250" cy="200" r="7" fill="#ef4444" stroke="#ffffff" stroke-width="2" />
+                        <line x1="0" y1="250" x2="500" y2="250" class="grid-line" />
+                        <line x1="250" y1="0" x2="250" y2="500" class="grid-line" />
+                        <line x1="0" y1="0" x2="500" y2="500" class="grid-line" />
+                        <line x1="0" y1="500" x2="500" y2="0" class="grid-line" />
+                        <circle cx="250" cy="250" r="7" fill="#ef4444" stroke="#ffffff" stroke-width="2" />
                     </g>
                 </svg>
             </div>
@@ -293,10 +299,10 @@
             </div>
 
             <!-- Draft Image Display with Grid Overlay -->
-            <div class="relative w-full max-w-[450px] h-[330px] sm:h-[350px] mx-auto bg-slate-200 rounded-xl overflow-hidden border-2 border-slate-300 shadow-inner">
-                <canvas id="draftCanvas" width="450" height="350" class="w-full h-full object-contain bg-white"></canvas>
+            <div class="relative w-full max-w-[450px] aspect-square mx-auto bg-slate-200 rounded-xl overflow-hidden border-2 border-slate-300 shadow-inner">
+                <canvas id="draftCanvas" width="500" height="500" class="w-full h-full object-contain bg-white"></canvas>
                 <!-- SVG Overlay Container -->
-                <svg id="draftOverlay" class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 450 350" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <svg id="draftOverlay" class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 500 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
                     <!-- Dynamic overlay injected by JS -->
                 </svg>
             </div>
@@ -491,12 +497,10 @@
             overlay.classList.remove('hidden');
 
             if (data.type === 'symmetry') {
-                // 單條垂直對稱線
                 const line = document.createElement('div');
                 line.className = 'scan-line';
                 overlay.appendChild(line);
             } else if (data.type === 'multi-symmetry') {
-                // 馬蒂斯禮拜堂：精確位於第 1&2, 3&4, 5&6 扇玻璃窗之間的中線縫隙 (21.8%, 50.0%, 78.2%)
                 const positions = [21.8, 50.0, 78.2];
                 positions.forEach(pos => {
                     const line = document.createElement('div');
@@ -505,21 +509,17 @@
                     overlay.appendChild(line);
                 });
             } else if (data.type === 'cologne-hybrid') {
-                // 科隆大教堂：上方黃色 8 折放射星芒 + 下方貫穿紅色垂直對稱軸
                 const container = document.createElement('div');
                 container.style.cssText = 'position: absolute; inset: 0; pointer-events: none;';
 
-                // 下方貫穿垂直對稱軸 (紅色)
                 const redLine = document.createElement('div');
                 redLine.style.cssText = 'position: absolute; top: 15%; left: 50%; width: 4px; height: 85%; background: rgba(239, 68, 68, 0.95); box-shadow: 0 0 14px #ef4444; transform: translateX(-50%);';
                 container.appendChild(redLine);
 
-                // 上方 8 折放射黃色中心點
                 const dot = document.createElement('div');
                 dot.style.cssText = 'position: absolute; top: 15%; left: 50%; width: 14px; height: 14px; background-color: #facc15; border: 2.5px solid #ffffff; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 12px #facc15; z-index: 20;';
                 container.appendChild(dot);
 
-                // 上方 8 條黃色放射光芒 (向八個方向發射)
                 for (let i = 0; i < 8; i++) {
                     const ray = document.createElement('div');
                     ray.style.cssText = `
@@ -538,7 +538,6 @@
 
                 overlay.appendChild(container);
             } else {
-                // 放射掃描
                 const container = document.createElement('div');
                 container.className = 'radial-scan';
                 const dot = document.createElement('div');
@@ -557,7 +556,7 @@
             document.getElementById('churchDesc').innerHTML = data.desc;
         }
 
-        /* ================= TAB 2: AI MIRROR CANVAS ================= */
+        /* ================= TAB 2: AI MIRROR CANVAS (1:1 PERFECT TOUCH) ================= */
         const canvas = document.getElementById('mirrorCanvas');
         const ctx = canvas.getContext('2d');
         let isDrawing = false;
@@ -609,10 +608,23 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
-        function getPos(e) {
+        // 精確計算任何設備（手機/平板/電腦/Google Sites iframe）的 Canvas 內部像素座標
+        function getCanvasCoords(e) {
             const rect = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            let clientX, clientY;
+
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else if (e.changedTouches && e.changedTouches.length > 0) {
+                clientX = e.changedTouches[0].clientX;
+                clientY = e.changedTouches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            // 用 canvas.width (500) 與 rect.width 比對，確保等比例 1:1 精確對應
             return {
                 x: (clientX - rect.left) * (canvas.width / rect.width),
                 y: (clientY - rect.top) * (canvas.height / rect.height)
@@ -622,7 +634,7 @@
         function startDrawing(e) {
             saveCanvasState();
             isDrawing = true;
-            const pos = getPos(e);
+            const pos = getCanvasCoords(e);
             lastX = pos.x;
             lastY = pos.y;
             drawSegment(pos.x, pos.y, pos.x, pos.y);
@@ -630,7 +642,7 @@
 
         function draw(e) {
             if (!isDrawing) return;
-            const pos = getPos(e);
+            const pos = getCanvasCoords(e);
             drawSegment(lastX, lastY, pos.x, pos.y);
             lastX = pos.x;
             lastY = pos.y;
@@ -656,21 +668,26 @@
                 ctx.strokeStyle = color;
             }
 
-            const centerX = canvas.width / 2; // 250
-            const centerY = canvas.height / 2; // 200
+            const CX = canvas.width / 2;  // 250
+            const CY = canvas.height / 2; // 250
 
             if (canvasMode === '1axis') {
+                // 1軸左右鏡像對稱 (垂直中軸 250)
                 strokeLine(x1, y1, x2, y2);
-                strokeLine(2 * centerX - x1, y1, 2 * centerX - x2, y2);
+                strokeLine(2 * CX - x1, y1, 2 * CX - x2, y2);
             } else if (canvasMode === '8axis') {
+                // 8折中心放射 (以 (250, 250) 為中心向 8 個方向勻稱旋轉)
                 for (let i = 0; i < 8; i++) {
-                    const angle = (i * Math.PI) / 4;
+                    const angle = (i * Math.PI) / 4; // 0, 45, 90, 135, 180, 225, 270, 315 度
                     ctx.save();
-                    ctx.translate(centerX, centerY);
+                    ctx.translate(CX, CY);
                     ctx.rotate(angle);
 
-                    strokeLine(x1 - centerX, y1 - centerY, x2 - centerX, y2 - centerY);
-                    strokeLine(-(x1 - centerX), y1 - centerY, -(x2 - centerX), y2 - centerY);
+                    // 順暢畫出 8 個方位完全對齊的筆劃
+                    ctx.beginPath();
+                    ctx.moveTo(x1 - CX, y1 - CY);
+                    ctx.lineTo(x2 - CX, y2 - CY);
+                    ctx.stroke();
 
                     ctx.restore();
                 }
@@ -685,13 +702,32 @@
             ctx.stroke();
         }
 
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        window.addEventListener('mouseup', stopDrawing);
+        // 強制 iPad / Mobile / Touch 事件絕不觸發頁面滾動與拖拽
+        canvas.style.touchAction = 'none';
 
-        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); });
-        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
-        canvas.addEventListener('touchend', stopDrawing);
+        // 跨平臺 Pointer Events 事件處理
+        canvas.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            try { canvas.setPointerCapture(e.pointerId); } catch(err){}
+            startDrawing(e);
+        });
+        canvas.addEventListener('pointermove', (e) => {
+            e.preventDefault();
+            if (isDrawing) draw(e);
+        });
+        canvas.addEventListener('pointerup', (e) => {
+            e.preventDefault();
+            try { canvas.releasePointerCapture(e.pointerId); } catch(err){}
+            stopDrawing();
+        });
+        canvas.addEventListener('pointercancel', (e) => {
+            stopDrawing();
+        });
+
+        // 解決 iOS Safari 被動事件（Passive Event）攔截機制
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); }, { passive: false });
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); }, { passive: false });
+        canvas.addEventListener('touchend', (e) => { e.preventDefault(); stopDrawing(); }, { passive: false });
 
         /* ================= TAB 3: DRAFT SMART DIAGNOSIS ================= */
         const draftCanvas = document.getElementById('draftCanvas');
@@ -700,17 +736,16 @@
 
         function drawBlackGridBackground() {
             draftCtx.save();
-            draftCtx.strokeStyle = "#cbd5e1"; // Subtle grid line
+            draftCtx.strokeStyle = "#cbd5e1";
             draftCtx.lineWidth = 1;
             
-            // Draw 20px grid
-            for (let x = 0; x <= draftCanvas.width; x += 20) {
+            for (let x = 0; x <= draftCanvas.width; x += 25) {
                 draftCtx.beginPath();
                 draftCtx.moveTo(x, 0);
                 draftCtx.lineTo(x, draftCanvas.height);
                 draftCtx.stroke();
             }
-            for (let y = 0; y <= draftCanvas.height; y += 20) {
+            for (let y = 0; y <= draftCanvas.height; y += 25) {
                 draftCtx.beginPath();
                 draftCtx.moveTo(0, y);
                 draftCtx.lineTo(draftCanvas.width, y);
@@ -725,34 +760,31 @@
             
             if (type === 'symmetry') {
                 overlay.innerHTML = `
-                    <line x1="225" y1="0" x2="225" y2="350" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 6"/>
-                    <rect x="10" y="10" width="75" height="24" fill="#ef4444" rx="4" opacity="0.85"/>
-                    <text x="47" y="26" fill="white" font-size="11" font-weight="bold" text-anchor="middle">左半邊</text>
-                    <rect x="365" y="10" width="75" height="24" fill="#3b82f6" rx="4" opacity="0.85"/>
-                    <text x="402" y="26" fill="white" font-size="11" font-weight="bold" text-anchor="middle">右半邊</text>
+                    <line x1="250" y1="0" x2="250" y2="500" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 6"/>
+                    <rect x="10" y="10" width="85" height="26" fill="#ef4444" rx="4" opacity="0.85"/>
+                    <text x="52" y="27" fill="white" font-size="12" font-weight="bold" text-anchor="middle">左半邊</text>
+                    <rect x="405" y="10" width="85" height="26" fill="#3b82f6" rx="4" opacity="0.85"/>
+                    <text x="447" y="27" fill="white" font-size="12" font-weight="bold" text-anchor="middle">右半邊</text>
                 `;
             } else if (type === 'radial') {
                 overlay.innerHTML = `
-                    <line x1="0" y1="175" x2="450" y2="175" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 4"/>
-                    <line x1="225" y1="0" x2="225" y2="350" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 4"/>
-                    <line x1="0" y1="0" x2="450" y2="350" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/>
-                    <line x1="0" y1="350" x2="450" y2="0" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/>
-                    <circle cx="225" cy="175" r="7" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
-                    <text x="225" y="160" fill="#f59e0b" font-size="11" font-weight="bold" text-anchor="middle">【中心黃點】</text>
+                    <line x1="0" y1="250" x2="500" y2="250" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 4"/>
+                    <line x1="250" y1="0" x2="250" y2="500" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 4"/>
+                    <line x1="0" y1="0" x2="500" y2="500" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/>
+                    <line x1="0" y1="500" x2="500" y2="0" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/>
+                    <circle cx="250" cy="250" r="8" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+                    <text x="250" y="232" fill="#f59e0b" font-size="12" font-weight="bold" text-anchor="middle">【中心黃點】</text>
                 `;
             } else if (type === 'hybrid') {
                 overlay.innerHTML = `
-                    <!-- 貫穿垂直對稱中軸 (紅色) -->
-                    <line x1="225" y1="0" x2="225" y2="350" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 6"/>
-                    
-                    <!-- 8折放射黃色指南軸網格 (兼顧中心或局部放射) -->
-                    <line x1="0" y1="175" x2="450" y2="175" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3 3"/>
-                    <line x1="0" y1="0" x2="450" y2="350" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3"/>
-                    <line x1="0" y1="350" x2="450" y2="0" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3"/>
-                    <circle cx="225" cy="175" r="7" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+                    <line x1="250" y1="0" x2="250" y2="500" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 6"/>
+                    <line x1="0" y1="250" x2="500" y2="250" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3 3"/>
+                    <line x1="0" y1="0" x2="500" y2="500" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3"/>
+                    <line x1="0" y1="500" x2="500" y2="0" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3"/>
+                    <circle cx="250" cy="250" r="8" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
 
-                    <rect x="10" y="10" width="120" height="22" fill="#8b5cf6" rx="4" opacity="0.9"/>
-                    <text x="70" y="25" fill="white" font-size="10" font-weight="bold" text-anchor="middle">🔀 對稱 + 放射雙網格</text>
+                    <rect x="10" y="10" width="130" height="24" fill="#8b5cf6" rx="4" opacity="0.9"/>
+                    <text x="75" y="26" fill="white" font-size="11" font-weight="bold" text-anchor="middle">🔀 對稱 + 放射雙網格</text>
                 `;
             }
         }
@@ -784,22 +816,22 @@
             draftCtx.fillRect(0, 0, draftCanvas.width, draftCanvas.height);
             drawBlackGridBackground();
 
-            const cx = 225, cy = 175;
+            const cx = 250, cy = 250;
 
             if (mode === 'balancedSymmetry') {
                 document.querySelector('input[value="symmetry"]').checked = true;
-                draftCtx.strokeStyle = "#1e1b4b"; // Dark pencil graphite color
+                draftCtx.strokeStyle = "#1e1b4b";
                 draftCtx.lineWidth = 4;
                 
                 draftCtx.beginPath();
-                draftCtx.arc(135, 175, 45, 0, Math.PI * 2);
+                draftCtx.arc(150, 250, 50, 0, Math.PI * 2);
                 draftCtx.stroke();
-                draftCtx.strokeRect(90, 80, 90, 190);
+                draftCtx.strokeRect(100, 120, 100, 260);
 
                 draftCtx.beginPath();
-                draftCtx.arc(315, 175, 45, 0, Math.PI * 2);
+                draftCtx.arc(350, 250, 50, 0, Math.PI * 2);
                 draftCtx.stroke();
-                draftCtx.strokeRect(270, 80, 90, 190);
+                draftCtx.strokeRect(300, 120, 100, 260);
 
             } else if (mode === 'imbalancedSymmetry') {
                 document.querySelector('input[value="symmetry"]').checked = true;
@@ -807,61 +839,57 @@
                 draftCtx.lineWidth = 4;
 
                 draftCtx.beginPath();
-                draftCtx.arc(120, 175, 55, 0, Math.PI * 2);
+                draftCtx.arc(130, 250, 60, 0, Math.PI * 2);
                 draftCtx.stroke();
-                draftCtx.fillRect(70, 120, 100, 110);
+                draftCtx.fillRect(80, 180, 110, 140);
 
                 draftCtx.beginPath();
-                draftCtx.arc(330, 175, 20, 0, Math.PI * 2);
+                draftCtx.arc(370, 250, 22, 0, Math.PI * 2);
                 draftCtx.stroke();
 
             } else if (mode === 'balancedRadial') {
                 document.querySelector('input[value="radial"]').checked = true;
                 for (let i = 0; i < 8; i++) {
                     const angle = (i * Math.PI) / 4;
-                    drawPetal(cx, cy, 75, angle, "#1e1b4b");
+                    drawPetal(cx, cy, 100, angle, "#1e1b4b");
                 }
                 draftCtx.strokeStyle = "#312e81";
                 draftCtx.lineWidth = 3;
                 draftCtx.beginPath();
-                draftCtx.arc(cx, cy, 30, 0, Math.PI * 2);
+                draftCtx.arc(cx, cy, 35, 0, Math.PI * 2);
                 draftCtx.stroke();
 
             } else if (mode === 'imbalancedRadial') {
                 document.querySelector('input[value="radial"]').checked = true;
                 for (let i = 0; i < 5; i++) {
                     const angle = (i * Math.PI) / 4;
-                    drawPetal(cx, cy, 75, angle, "#1e1b4b");
+                    drawPetal(cx, cy, 100, angle, "#1e1b4b");
                 }
             } else if (mode === 'balancedHybrid') {
                 document.querySelector('input[value="hybrid"]').checked = true;
                 
-                // 上方 8 折放射星芒花窗 (以 cx=225, cy=80 為中心)
                 for (let i = 0; i < 8; i++) {
                     const angle = (i * Math.PI) / 4;
-                    drawPetal(cx, 80, 45, angle, "#1e1b4b");
+                    drawPetal(cx, 120, 55, angle, "#1e1b4b");
                 }
                 draftCtx.strokeStyle = "#312e81";
                 draftCtx.lineWidth = 2.5;
                 draftCtx.beginPath();
-                draftCtx.arc(cx, 80, 18, 0, Math.PI * 2);
+                draftCtx.arc(cx, 120, 22, 0, Math.PI * 2);
                 draftCtx.stroke();
 
-                // 下方左右對稱拱窗/格仔 (Y: 170 to 330)
                 draftCtx.strokeStyle = "#1e1b4b";
                 draftCtx.lineWidth = 3.5;
                 
-                // 左拱窗
                 draftCtx.beginPath();
-                draftCtx.arc(135, 230, 35, 0, Math.PI * 2);
+                draftCtx.arc(150, 320, 45, 0, Math.PI * 2);
                 draftCtx.stroke();
-                draftCtx.strokeRect(100, 190, 70, 130);
+                draftCtx.strokeRect(110, 260, 80, 170);
 
-                // 右拱窗
                 draftCtx.beginPath();
-                draftCtx.arc(315, 230, 35, 0, Math.PI * 2);
+                draftCtx.arc(350, 320, 45, 0, Math.PI * 2);
                 draftCtx.stroke();
-                draftCtx.strokeRect(280, 190, 70, 130);
+                draftCtx.strokeRect(310, 260, 80, 170);
             }
 
             draftLoaded = true;
@@ -897,16 +925,14 @@
             const imgData = draftCtx.getImageData(0, 0, draftCanvas.width, draftCanvas.height);
             const pixels = imgData.data;
 
-            const cx = draftCanvas.width / 2; // 225
-            const cy = draftCanvas.height / 2; // 175
+            const cx = draftCanvas.width / 2; // 250
+            const cy = draftCanvas.height / 2; // 250
 
             let tl = 0, tr = 0, bl = 0, br = 0;
 
-            // Black Grid Projection Filter Algorithm
             for (let y = 0; y < draftCanvas.height; y++) {
                 for (let x = 0; x < draftCanvas.width; x++) {
-                    // Ignore straight grid lines at every 20px interval
-                    if (x % 20 === 0 || y % 20 === 0) continue;
+                    if (x % 25 === 0 || y % 25 === 0) continue;
 
                     const idx = (y * draftCanvas.width + x) * 4;
                     const r = pixels[idx], g = pixels[idx+1], b = pixels[idx+2];
