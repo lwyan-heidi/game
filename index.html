@@ -28,13 +28,13 @@
             left: 50%;
             width: 4px;
             height: 100%;
-            background: rgba(239, 68, 68, 0.9);
+            background: rgba(239, 68, 68, 0.95);
             box-shadow: 0 0 14px #ef4444;
             transform: translateX(-50%);
             animation: scanVertical 1.2s ease-in-out infinite alternate;
         }
         @keyframes scanVertical {
-            0% { opacity: 0.2; transform: translateX(-50%) scaleY(0.1); }
+            0% { opacity: 0.3; transform: translateX(-50%) scaleY(0.1); }
             100% { opacity: 1; transform: translateX(-50%) scaleY(1); }
         }
 
@@ -46,8 +46,6 @@
         }
         .center-dot {
             position: absolute;
-            top: 50%;
-            left: 50%;
             width: 16px;
             height: 16px;
             background-color: #ef4444;
@@ -64,8 +62,6 @@
         }
         .ray-line {
             position: absolute;
-            top: 50%;
-            left: 50%;
             width: 50%;
             height: 2px;
             background: linear-gradient(90deg, #f59e0b, transparent);
@@ -139,14 +135,13 @@
                 <select id="churchSelect" onchange="changeChurch()" class="w-full md:w-auto p-2.5 border-2 border-indigo-200 rounded-lg bg-indigo-50 font-bold text-slate-800 focus:outline-none focus:border-indigo-500 text-sm">
                     <option value="zurich">1. 蘇黎世大教堂</option>
                     <option value="matisse">2. 馬蒂斯禮拜堂</option>
-                    <option value="sagrada">3. 聖家堂玫瑰窗</option>
-                    <option value="cologne">4. 科隆大教堂</option>
+                    <option value="sagrada">3. 聖家族玫瑰窗</option>
                 </select>
             </div>
 
             <!-- Image Viewport -->
-            <div class="relative w-full h-64 md:h-80 bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center border-4 border-slate-800 shadow-inner">
-                <img id="churchImage" src="https://cdn.fundesign.tv/wp-content/uploads/2019/03/16-best-stained-glass.jpg" class="w-full h-full object-contain bg-slate-950" alt="教堂玻璃窗">
+            <div class="relative w-full aspect-video max-h-[380px] bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center border-4 border-slate-800 shadow-inner mx-auto">
+                <img id="churchImage" src="1.jpg" class="w-full h-full object-cover" alt="教堂玻璃窗">
                 <div id="scanOverlay" class="hidden absolute inset-0 bg-black/20 pointer-events-none"></div>
             </div>
 
@@ -159,10 +154,10 @@
 
             <!-- Knowledge Card -->
             <div id="knowledgeCard" class="mt-4 p-4 rounded-xl bg-amber-50 border-2 border-amber-200 text-slate-800 transition-all">
-                <h3 class="font-bold text-amber-900 text-sm md:text-base flex items-center gap-1.5">
+                <h3 class="font-bold text-amber-900 text-sm md:text-base flex items-center gap-1.5 mb-2">
                     💡 藝術作品解說與知識點
                 </h3>
-                <div id="churchDesc" class="text-xs md:text-sm leading-relaxed text-amber-900/90 mt-2">
+                <div id="churchDesc" class="text-xs md:text-sm leading-relaxed text-amber-900/90">
                     <div class="p-3 bg-white/80 rounded-lg border border-amber-300 text-amber-800 font-medium flex items-center gap-2">
                         <span>🔒</span> 請點擊上方「啟動 AI 智能掃描」解鎖均衡類型答案與賞析。
                     </div>
@@ -177,19 +172,16 @@
             </h2>
             <p class="text-slate-600 text-xs md:text-sm mb-3">親手劃下一筆，AI 將自動為你複製對稱圖案。畫錯可用橡皮擦或復原上一步！</p>
 
-            <!-- Mode Selector & Tool Bar -->
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3 bg-slate-100 p-2.5 rounded-xl border border-slate-200">
-                <!-- Mode Toggle -->
                 <div class="flex items-center gap-1 bg-white p-1 rounded-lg border shadow-sm">
                     <button id="btn-mode-1" onclick="setMode('1axis')" class="px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white">
-                        1軸左右對稱
+                        ↔️ 單軸對稱
                     </button>
                     <button id="btn-mode-8" onclick="setMode('8axis')" class="px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100">
-                        8折中心放射
+                        ❇️ 放射均衡
                     </button>
                 </div>
 
-                <!-- Tool Toggle (Brush / Eraser) -->
                 <div class="flex items-center gap-1 bg-white p-1 rounded-lg border shadow-sm">
                     <button id="btn-tool-brush" onclick="setTool('brush')" class="px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white">
                         ✏️ 畫筆
@@ -199,7 +191,6 @@
                     </button>
                 </div>
 
-                <!-- Controls -->
                 <div class="flex items-center gap-3">
                     <div class="flex items-center gap-1">
                         <label class="text-xs font-bold text-slate-600">顏色:</label>
@@ -221,10 +212,9 @@
                 </div>
             </div>
 
-            <!-- Canvas Container (STRICT 1:1 SQUARE ASPECT RATIO TO PREVENT DISTORTION) -->
-            <div class="canvas-container relative w-full max-w-[480px] aspect-square mx-auto bg-slate-900 rounded-xl overflow-hidden border-4 border-slate-800 shadow-xl select-none" style="touch-action: none;">
+            <!-- 固定 aspect-ratio 與 min-height 確保畫板絕不塌陷 -->
+            <div class="canvas-container relative w-full max-w-[480px] mx-auto bg-slate-900 rounded-xl overflow-hidden border-4 border-slate-800 shadow-xl select-none" style="touch-action: none; aspect-ratio: 1 / 1; min-height: 320px;">
                 <canvas id="mirrorCanvas" width="500" height="500" class="absolute inset-0 w-full h-full z-10 cursor-crosshair" style="touch-action: none;"></canvas>
-                <!-- SVG Grid Overlay (Matching 500x500 Square) -->
                 <svg id="canvasGrid" class="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 500 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
                     <line id="grid1Axis" x1="250" y1="0" x2="250" y2="500" stroke="#ef4444" stroke-dasharray="6 6" stroke-width="2"/>
                     <g id="grid8Axis" class="hidden">
@@ -245,31 +235,28 @@
             </h2>
             <p class="text-slate-600 text-xs md:text-sm mb-3">選擇設計目標，AI 視覺網格將幫你計算圖案分佈，並給出具體的位置微調建議！</p>
 
-            <!-- Mode & Grid Notification -->
             <div class="mb-3 bg-slate-100 p-2 rounded-lg text-slate-700 text-xs font-bold flex items-center gap-2 border border-slate-200">
                 <span>✏️</span> AI 鉛筆筆跡分離模式已開啟（系統將自動過濾實體工作紙上的黑色印刷格仔線）
             </div>
 
-            <!-- Target Balance Selection -->
             <div class="mb-3 bg-indigo-50/80 p-3 rounded-xl border border-indigo-200">
                 <span class="block text-xs font-bold text-indigo-900 mb-1.5">1. 請選擇你的設計目標均衡類型：</span>
                 <div class="flex flex-wrap gap-3 sm:gap-4">
                     <label class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold cursor-pointer text-indigo-900">
                         <input type="radio" name="targetType" value="symmetry" onchange="updateDraftGrid()" class="accent-indigo-600">
-                        左右對稱均衡
+                        ↔️ 單軸對稱
                     </label>
                     <label class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold cursor-pointer text-indigo-900">
                         <input type="radio" name="targetType" value="radial" checked onchange="updateDraftGrid()" class="accent-indigo-600">
-                        8折放射均衡
+                        ❇️ 放射均衡
                     </label>
                     <label class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold cursor-pointer text-indigo-900">
                         <input type="radio" name="targetType" value="hybrid" onchange="updateDraftGrid()" class="accent-indigo-600">
-                        🔀 混合均衡（同時融合對稱與放射要素）
+                        🔀 混合均衡（對稱 + 放射）
                     </label>
                 </div>
             </div>
 
-            <!-- Upload & Demo Action Bar -->
             <div class="space-y-2 mb-3">
                 <div class="flex items-center gap-2">
                     <label class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3.5 rounded-lg text-xs cursor-pointer shadow transition active:scale-95">
@@ -298,12 +285,9 @@
                 </div>
             </div>
 
-            <!-- Draft Image Display with Grid Overlay -->
-            <div class="relative w-full max-w-[450px] aspect-square mx-auto bg-slate-200 rounded-xl overflow-hidden border-2 border-slate-300 shadow-inner">
+            <div class="relative w-full max-w-[450px] mx-auto bg-slate-200 rounded-xl overflow-hidden border-2 border-slate-300 shadow-inner" style="aspect-ratio: 1 / 1; min-height: 300px;">
                 <canvas id="draftCanvas" width="500" height="500" class="w-full h-full object-contain bg-white"></canvas>
-                <!-- SVG Overlay Container -->
                 <svg id="draftOverlay" class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 500 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Dynamic overlay injected by JS -->
                 </svg>
             </div>
 
@@ -313,20 +297,13 @@
                 </button>
             </div>
 
-            <!-- Report Card -->
             <div id="reportContainer" class="hidden mt-4 p-4 rounded-xl bg-slate-50 border-2 border-slate-200 transition-all">
                 <h3 class="font-bold text-slate-800 text-sm sm:text-base mb-2 flex items-center gap-2">
                     📊 AI 診斷報告與建議
                 </h3>
-                
-                <!-- Density Distribution Bars -->
                 <div id="densityBars" class="space-y-2 mb-3 bg-white p-3 rounded-lg border border-slate-200">
-                    <!-- Progress bars dynamically injected -->
                 </div>
-
-                <!-- Detailed Feedback Text -->
                 <div id="reportText" class="text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-white border border-slate-200">
-                    <!-- Injected by JS -->
                 </div>
             </div>
         </section>
@@ -338,8 +315,8 @@
             </h2>
             <p class="text-slate-600 text-xs md:text-sm mb-4">考考你的藝術眼光！選出正確的答案，看看你能拿幾分？</p>
 
-            <!-- Quiz Card -->
-            <div class="bg-indigo-50/60 p-4 md:p-6 rounded-xl border border-indigo-100">
+            <!-- 答題區域 -->
+            <div id="quizContainer" class="bg-indigo-50/60 p-4 md:p-6 rounded-xl border border-indigo-100">
                 <div class="flex justify-between items-center mb-3">
                     <span id="quizProgress" class="text-xs font-bold bg-indigo-600 text-white px-3 py-1 rounded-full">
                         第 1 / 5 題
@@ -353,22 +330,36 @@
                     題目載入中...
                 </h3>
 
-                <!-- Options -->
                 <div id="quizOptions" class="space-y-2">
-                    <!-- Dynamic option buttons -->
                 </div>
 
-                <!-- Explanation Box -->
                 <div id="quizExplanation" class="hidden mt-3 p-3 rounded-lg bg-white border text-xs sm:text-sm">
-                    <!-- Explanation injected here -->
                 </div>
 
-                <!-- Next Button -->
                 <div class="mt-4 text-right">
                     <button id="btnNextQuiz" onclick="nextQuestion()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-lg text-xs sm:text-sm shadow transition">
                         下一題 ➔
                     </button>
                 </div>
+            </div>
+
+            <!-- 成績結算紀錄頁面 (預設隱藏) -->
+            <div id="quizResultView" class="hidden bg-indigo-50/80 p-6 rounded-xl border-2 border-indigo-200 text-center shadow-sm">
+                <div class="text-5xl mb-2" id="resultEmoji">🏆</div>
+                <h3 class="text-xl font-extrabold text-indigo-900 mb-1">挑戰完成！成績紀錄</h3>
+                <p class="text-slate-600 text-xs sm:text-sm mb-4">小學四年級視覺藝術科 — 玻璃畫均衡概念測試</p>
+                
+                <div class="bg-white p-4 rounded-2xl border border-indigo-100 max-w-sm mx-auto mb-5 shadow-inner">
+                    <div class="text-xs font-bold text-slate-500 mb-1">本次挑戰最終得分</div>
+                    <div class="text-4xl font-black text-indigo-600 tracking-wider mb-2" id="finalScoreText">100 / 100 分</div>
+                    <div class="text-xs sm:text-sm font-bold text-indigo-900 bg-indigo-50 p-2.5 rounded-lg border border-indigo-200" id="resultComment">
+                        恭喜你！完美掌握所有均衡知識點！
+                    </div>
+                </div>
+
+                <button onclick="restartQuiz()" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform active:scale-95 text-xs sm:text-sm">
+                    🔄 重新挑戰
+                </button>
             </div>
         </section>
 
@@ -400,8 +391,8 @@
                     osc.start(now);
                     osc.stop(now + 0.05);
                 } else if (type === 'correct') {
-                    osc.frequency.setValueAtTime(523.25, now); // C5
-                    osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.08);
                     gain.gain.setValueAtTime(0.2, now);
                     gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
                     osc.start(now);
@@ -423,9 +414,7 @@
                     osc.start(now);
                     osc.stop(now + 0.3);
                 }
-            } catch (e) {
-                // Audio fallback silence
-            }
+            } catch (e) {}
         }
 
         /* ================= TAB SYSTEM ================= */
@@ -450,27 +439,45 @@
         const churchData = {
             zurich: {
                 name: "蘇黎世大教堂",
-                img: "https://cdn.fundesign.tv/wp-content/uploads/2019/03/16-best-stained-glass.jpg",
+                img: "1.jpg",
                 type: "symmetry",
-                desc: "<b>【單軸對稱均衡】</b><br>賈科梅蒂 (Augusto Giacometti) 設計。以垂直中軸線為基準，左右兩側形狀與色彩高度對應，呈現極致莊嚴與和諧。"
+                desc: `
+                    <div class="font-bold text-amber-900 text-sm md:text-base mb-1">【單軸對稱】</div>
+                    <div class="text-xs md:text-sm leading-relaxed mb-3">以中間的垂直紅色<b>對稱軸</b>為基準，左右兩邊像<b>照鏡子</b>一樣一模一樣！</div>
+                    <hr class="border-amber-200 my-2" />
+                    <div class="space-y-1 text-xs md:text-sm text-amber-900/80">
+                        <p><strong>🎨 設計師：</strong>奧古斯特·賈科梅蒂（Augusto Giacometti）</p>
+                        <p><strong>💡 趣味小資料：</strong>這扇窗戶最特別的地方，是藝術家使用了<b>真正的瑪瑙石切片</b>拼湊而成！當陽光穿透石材時，教堂內部會散發出像寶石一樣璀璨的光芒。</p>
+                    </div>
+                `
             },
             matisse: {
                 name: "馬蒂斯禮拜堂",
-                img: "https://www.economist.com/cdn-cgi/image/width=1424,quality=80,format=auto/media-assets/image/1843/styles/il_manual_crop_16_9/public/201810_DE_MAT_01-header_0.jpg",
+                img: "2.jpeg",
                 type: "multi-symmetry",
-                desc: "<b>【多軸鏡像對稱均衡】</b><br>野獸派大師馬蒂斯晚年名作。作品由 6 扇長條彩繪玻璃組成，每 2 扇為一組相互鏡像對稱。3 條紅色線條精確位於每組玻璃窗正中央，展現層次豐富的秩序美感！"
+                desc: `
+                    <div class="font-bold text-amber-900 text-sm md:text-base mb-1">【單軸對稱（3組）】</div>
+                    <div class="text-xs md:text-sm leading-relaxed mb-3">這裏有 3 組相同的窗戶。每一組的中間都有一條垂直<b>對稱軸</b>，左右兩邊像<b>照鏡子</b>一樣完全對稱！</div>
+                    <hr class="border-amber-200 my-2" />
+                    <div class="space-y-1 text-xs md:text-sm text-amber-900/80">
+                        <p><strong>🎨 設計師：</strong>亨利·馬蒂斯（Henri Matisse，野獸派大師）</p>
+                        <p><strong>💡 趣味小資料：</strong>馬蒂斯是 20 世紀非常著名的現代畫家。這座禮拜堂是他晚年最心愛的作品，他只使用了<b>藍（大海）、綠（植物）、黃（陽光）</b>三種顏色，就設計出充滿生命力的簡潔空間！</p>
+                    </div>
+                `
             },
             sagrada: {
-                name: "聖家堂玫瑰窗",
-                img: "https://scontent.fhkg10-2.fna.fbcdn.net/v/t39.30808-6/479810053_1193579359443967_722349675493958003_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1536&ctp=s2048x1536&_nc_cat=109&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=erGUmWOUQq4Q7kNvwHZasXv&_nc_oc=AdogFa77SiWWAqXzaLBn02t3LWn2ZLNVPlN51yYNTL4Q3gMIKkY-sgIW1S63p3EymQ4&_nc_zt=23&_nc_ht=scontent.fhkg10-2.fna&_nc_gid=11S8ejO1VY23hdZ9Sng8Lw&_nc_ss=7b289&oh=00_AQMrYhuo7wKKCNDlCIbGGSDydBmkC0wcVPAGbkFZNyaItg&oe=6AD1409A",
+                name: "聖家族玫瑰窗",
+                img: "3.jpeg",
                 type: "radial",
-                desc: "<b>【8折放射均衡】</b><br>高第 (Antoni Gaudí) 建築名作。圖案由圓形【中心黃點】向四周 360 度擴散延伸，展現強烈向心美感。"
-            },
-            cologne: {
-                name: "科隆大教堂",
-                img: "https://www.martincid.com/wp-content/uploads/2023/04/unnamed-51-802x1024.jpg",
-                type: "cologne-hybrid",
-                desc: "<b>【混合型均衡（上方放射 + 下方對稱）】</b><br>科隆大教堂名作（里希特窗）。上方尖拱處為圓形 8 折放射均衡花窗（黃色星芒），下方長條形拱窗則貫穿一條垂直對稱中軸（紅色線條），完美融合兩大均衡類型！"
+                desc: `
+                    <div class="font-bold text-amber-900 text-sm md:text-base mb-1">【放射均衡】</div>
+                    <div class="text-xs md:text-sm leading-relaxed mb-3">以中間的<b>中心點</b>為核心，圖案像風車或車輪一樣，向四周 <b>360 度擴散</b>延伸！</div>
+                    <hr class="border-amber-200 my-2" />
+                    <div class="space-y-1 text-xs md:text-sm text-amber-900/80">
+                        <p><strong>🎨 設計師：</strong>安東尼·高第（Antoni Gaudí）</p>
+                        <p><strong>💡 趣味小資料：</strong>高第非常熱愛大自然，他把整座教堂設計得像一片神秘森林。當太陽光透過這扇圓形的「玫瑰窗」照進教堂時，地面和牆壁上會投影出像彩虹一樣繽紛的光斑！</p>
+                    </div>
+                `
             }
         };
 
@@ -501,52 +508,33 @@
                 line.className = 'scan-line';
                 overlay.appendChild(line);
             } else if (data.type === 'multi-symmetry') {
-                const positions = [21.8, 50.0, 78.2];
+                // 針對 2.jpeg 精確對準 3 組窗戶牆面縫隙中央 (20.5%, 50.0%, 79.5%)
+                const positions = [20.5, 50.0, 79.5];
                 positions.forEach(pos => {
                     const line = document.createElement('div');
                     line.className = 'scan-line';
                     line.style.left = pos + '%';
                     overlay.appendChild(line);
                 });
-            } else if (data.type === 'cologne-hybrid') {
-                const container = document.createElement('div');
-                container.style.cssText = 'position: absolute; inset: 0; pointer-events: none;';
-
-                const redLine = document.createElement('div');
-                redLine.style.cssText = 'position: absolute; top: 15%; left: 50%; width: 4px; height: 85%; background: rgba(239, 68, 68, 0.95); box-shadow: 0 0 14px #ef4444; transform: translateX(-50%);';
-                container.appendChild(redLine);
-
-                const dot = document.createElement('div');
-                dot.style.cssText = 'position: absolute; top: 15%; left: 50%; width: 14px; height: 14px; background-color: #facc15; border: 2.5px solid #ffffff; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 12px #facc15; z-index: 20;';
-                container.appendChild(dot);
-
-                for (let i = 0; i < 8; i++) {
-                    const ray = document.createElement('div');
-                    ray.style.cssText = `
-                        position: absolute;
-                        top: 15%;
-                        left: 50%;
-                        width: 75px;
-                        height: 3px;
-                        background: #facc15;
-                        box-shadow: 0 0 8px #facc15;
-                        transform-origin: left center;
-                        transform: rotate(${i * 45}deg);
-                    `;
-                    container.appendChild(ray);
-                }
-
-                overlay.appendChild(container);
             } else {
                 const container = document.createElement('div');
                 container.className = 'radial-scan';
+                
+                // 針對 3.jpeg 精確對準玫瑰窗內圈石環及中央交叉軸心 (X: 53.6%, Y: 49.4%)
+                const centerX = 53.6;
+                const centerY = 49.4;
+
                 const dot = document.createElement('div');
                 dot.className = 'center-dot';
+                dot.style.left = centerX + '%';
+                dot.style.top = centerY + '%';
                 container.appendChild(dot);
 
                 for (let i = 0; i < 8; i++) {
                     const ray = document.createElement('div');
                     ray.className = 'ray-line';
+                    ray.style.left = centerX + '%';
+                    ray.style.top = centerY + '%';
                     ray.style.transform = `rotate(${i * 45}deg)`;
                     container.appendChild(ray);
                 }
@@ -556,7 +544,7 @@
             document.getElementById('churchDesc').innerHTML = data.desc;
         }
 
-        /* ================= TAB 2: AI MIRROR CANVAS (1:1 PERFECT TOUCH) ================= */
+        /* ================= TAB 2: AI MIRROR CANVAS ================= */
         const canvas = document.getElementById('mirrorCanvas');
         const ctx = canvas.getContext('2d');
         let isDrawing = false;
@@ -608,7 +596,6 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
-        // 精確計算任何設備（手機/平板/電腦/Google Sites iframe）的 Canvas 內部像素座標
         function getCanvasCoords(e) {
             const rect = canvas.getBoundingClientRect();
             let clientX, clientY;
@@ -624,7 +611,6 @@
                 clientY = e.clientY;
             }
 
-            // 用 canvas.width (500) 與 rect.width 比對，確保等比例 1:1 精確對應
             return {
                 x: (clientX - rect.left) * (canvas.width / rect.width),
                 y: (clientY - rect.top) * (canvas.height / rect.height)
@@ -668,27 +654,33 @@
                 ctx.strokeStyle = color;
             }
 
-            const CX = canvas.width / 2;  // 250
-            const CY = canvas.height / 2; // 250
+            const CX = canvas.width / 2;
+            const CY = canvas.height / 2;
 
             if (canvasMode === '1axis') {
-                // 1軸左右鏡像對稱 (垂直中軸 250)
                 strokeLine(x1, y1, x2, y2);
                 strokeLine(2 * CX - x1, y1, 2 * CX - x2, y2);
             } else if (canvasMode === '8axis') {
-                // 8折中心放射 (以 (250, 250) 為中心向 8 個方向勻稱旋轉)
-                for (let i = 0; i < 8; i++) {
-                    const angle = (i * Math.PI) / 4; // 0, 45, 90, 135, 180, 225, 270, 315 度
+                for (let i = 0; i < 4; i++) {
+                    const angle = (i * Math.PI) / 2;
+                    
                     ctx.save();
                     ctx.translate(CX, CY);
                     ctx.rotate(angle);
-
-                    // 順暢畫出 8 個方位完全對齊的筆劃
                     ctx.beginPath();
                     ctx.moveTo(x1 - CX, y1 - CY);
                     ctx.lineTo(x2 - CX, y2 - CY);
                     ctx.stroke();
+                    ctx.restore();
 
+                    ctx.save();
+                    ctx.translate(CX, CY);
+                    ctx.rotate(angle);
+                    ctx.scale(-1, 1);
+                    ctx.beginPath();
+                    ctx.moveTo(x1 - CX, y1 - CY);
+                    ctx.lineTo(x2 - CX, y2 - CY);
+                    ctx.stroke();
                     ctx.restore();
                 }
             }
@@ -702,10 +694,8 @@
             ctx.stroke();
         }
 
-        // 強制 iPad / Mobile / Touch 事件絕不觸發頁面滾動與拖拽
         canvas.style.touchAction = 'none';
 
-        // 跨平臺 Pointer Events 事件處理
         canvas.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             try { canvas.setPointerCapture(e.pointerId); } catch(err){}
@@ -724,7 +714,6 @@
             stopDrawing();
         });
 
-        // 解決 iOS Safari 被動事件（Passive Event）攔截機制
         canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); }, { passive: false });
         canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); }, { passive: false });
         canvas.addEventListener('touchend', (e) => { e.preventDefault(); stopDrawing(); }, { passive: false });
@@ -773,7 +762,7 @@
                     <line x1="0" y1="0" x2="500" y2="500" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/>
                     <line x1="0" y1="500" x2="500" y2="0" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/>
                     <circle cx="250" cy="250" r="8" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
-                    <text x="250" y="232" fill="#f59e0b" font-size="12" font-weight="bold" text-anchor="middle">【中心黃點】</text>
+                    <text x="250" y="232" fill="#f59e0b" font-size="12" font-weight="bold" text-anchor="middle">【中心點】</text>
                 `;
             } else if (type === 'hybrid') {
                 overlay.innerHTML = `
@@ -925,8 +914,8 @@
             const imgData = draftCtx.getImageData(0, 0, draftCanvas.width, draftCanvas.height);
             const pixels = imgData.data;
 
-            const cx = draftCanvas.width / 2; // 250
-            const cy = draftCanvas.height / 2; // 250
+            const cx = draftCanvas.width / 2;
+            const cy = draftCanvas.height / 2;
 
             let tl = 0, tr = 0, bl = 0, br = 0;
 
@@ -982,7 +971,7 @@
 
                 if (Math.abs(leftPct - rightPct) <= 15) {
                     textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900";
-                    textCard.innerHTML = "<b>🌟 完美對稱！</b> 兩邊圖案份量非常均勻，達到了穩重的對稱美感！";
+                    textCard.innerHTML = "<b>🌟 完美單軸對稱！</b> 兩邊圖案份量非常均勻，達到了穩重的對稱美感！";
                 } else if (leftPct > rightPct) {
                     textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-900";
                     textCard.innerHTML = "<b>💡 修改提示：</b> 【左半邊】圖案豐富，但【右半邊】較空虛。請將左側圖案向左微移 1-2 個格仔，並在右側補上對應圖案！";
@@ -997,7 +986,7 @@
                 const brP = Math.round((br / total) * 100);
 
                 barsBox.innerHTML = `
-                    <div class="text-xs font-bold text-slate-700 mb-1">8折放射 4 象限鉛筆筆跡比例：</div>
+                    <div class="text-xs font-bold text-slate-700 mb-1">放射均衡 4 象限鉛筆筆跡比例：</div>
                     <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
                         <div class="bg-indigo-50 p-1.5 rounded border border-indigo-100">左上區: ${tlP}% (${tlP > 18 ? '🟢 充實' : '🔴 稀疏'})</div>
                         <div class="bg-indigo-50 p-1.5 rounded border border-indigo-100">右上區: ${trP}% (${trP > 18 ? '🟢 充實' : '🔴 稀疏'})</div>
@@ -1008,10 +997,10 @@
 
                 if (Math.min(tlP, trP, blP, brP) >= 18) {
                     textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900";
-                    textCard.innerHTML = "<b>🌟 完美的 8 折放射均衡！</b> 圖案圍繞著【中心黃點】均勻向四周擴散，呈現絕佳的向心美感！";
+                    textCard.innerHTML = "<b>🌟 完美的放射均衡！</b> 圖案圍繞著【中心點】均勻向四周擴散，呈現絕佳的向心美感！";
                 } else {
                     textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-900";
-                    textCard.innerHTML = `<b>💡 AI 空間微調提示：</b> 發現圖案分佈不均！請圍繞<b>【中心黃點】</b>在較稀疏的區域（如右下區）補上缺失的花瓣，保持半徑距離一致！`;
+                    textCard.innerHTML = `<b>💡 AI 空間微調提示：</b> 發現圖案分佈不均！請圍繞<b>【中心點】</b>在較稀疏的區域（如右下區）補上缺失的花瓣，保持半徑距離一致！`;
                 }
             } else if (targetType === 'hybrid') {
                 const leftPct = Math.round(((tl + bl) / total) * 100);
@@ -1048,10 +1037,10 @@
 
                 if (isSymmetric && minQuadrant >= 12) {
                     textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900";
-                    textCard.innerHTML = "<b>✨ 完美的混合均衡！</b> 你的作品同時融合了【鏡像對稱的穩重感】與【放射圖案的向心美學】，畫面層次非常豐富精彩！";
+                    textCard.innerHTML = "<b>✨ 完美的混合均衡！</b> 你的作品同時融合了【單軸對稱的穩重感】與【放射均衡的向心美學】，畫面層次非常豐富精彩！";
                 } else {
                     textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-900";
-                    textCard.innerHTML = "<b>💡 混合均衡微調提示：</b> 混合均衡允許各種自由創作！建議確認畫面<b>左右兩側的色彩/重量是否平衡</b>，並讓<b>放射圖案核心點（不論在中央或上方）保持形態飽滿</b>。";
+                    textCard.innerHTML = "<b>💡 混合均衡微調提示：</b> 混合均衡允許各種自由創作！建議確認畫面<b>左右兩側的色彩/重量是否平衡</b>，並讓<b>放射圖案中心點（不論在中央或上方）保持形態飽滿</b>。";
                 }
             }
         }
@@ -1059,19 +1048,19 @@
         /* ================= TAB 4: 30-SECOND CHALLENGE ================= */
         const quizData = [
             {
-                q: "1. 什麼是「對稱均衡」？",
+                q: "1. 什麼是「單軸對稱」？",
                 options: [
                     "A. 畫面兩邊完全不一樣",
                     "B. 以一條對稱軸為基準，左右兩側形狀與色彩高度對應",
                     "C. 所有圖案都擠在角落"
                 ],
                 correct: 1,
-                exp: "對稱均衡是以中心垂直軸為基準，左右兩邊高度對應，給人莊嚴平穩的感受。"
+                exp: "單軸對稱是以中心垂直對稱軸為基準，左右兩邊高度對應，給人莊嚴平穩的感受。"
             },
             {
-                q: "2. 聖家堂的圓形玫瑰窗主要採用哪一種均衡類型？",
+                q: "2. 聖家族教堂的圓形玫瑰窗主要採用哪一種均衡類型？",
                 options: [
-                    "A. 8折放射均衡",
+                    "A. 放射均衡",
                     "B. 不對稱均衡",
                     "C. 上下顛倒均衡"
                 ],
@@ -1079,24 +1068,24 @@
                 exp: "玫瑰窗由中心點向四周 360 度擴散延伸，屬於典型的放射均衡。"
             },
             {
-                q: "3. 在設計 8 折放射圖案時，最重要的核心依據是什麼？",
+                q: "3. 關於「放射均衡」，下列哪一種描述是正確的？",
                 options: [
-                    "A. 【中心黃點】（中心點）",
-                    "B. 畫布的最左下角",
-                    "C. 畫布的外框線"
+                    "A. 圖案圍繞中心點向四周 360 度擴散延伸",
+                    "B. 畫面左右兩邊像照鏡子一樣完全相同",
+                    "C. 所有圖案都隨意擠在角落"
                 ],
                 correct: 0,
-                exp: "放射均衡需要圍繞中心點向外擴散，因此中心點是設計靈魂。"
+                exp: "放射均衡是以中心點為核心，圖案像風車或車輪一樣向四周 360 度擴散延伸。"
             },
             {
-                q: "4. 下列哪一座教堂的彩繪玻璃屬於「對稱均衡」的代表？",
+                q: "4. 下列哪一座教堂的彩繪玻璃屬於「單軸對稱」的代表？",
                 options: [
                     "A. 蘇黎世大教堂",
-                    "B. 聖家堂玫瑰窗",
+                    "B. 聖家族玫瑰窗",
                     "C. 旋轉木馬窗"
                 ],
                 correct: 0,
-                exp: "蘇黎世大教堂採用嚴謹的垂直對稱結構設計。"
+                exp: "蘇黎世大教堂採用嚴謹的單軸對稱結構設計。"
             },
             {
                 q: "5. 當草稿兩側的視覺墨水重量不平均時，我們可以怎麼調整？",
@@ -1116,6 +1105,9 @@
 
         function renderQuestion() {
             answered = false;
+            document.getElementById('quizContainer').classList.remove('hidden');
+            document.getElementById('quizResultView').classList.add('hidden');
+
             const q = quizData[currentQIndex];
             document.getElementById('quizProgress').innerText = `第 ${currentQIndex + 1} / ${quizData.length} 題`;
             document.getElementById('quizScore').innerText = `得分: ${score}`;
@@ -1180,8 +1172,7 @@
             if (currentQIndex < quizData.length - 1) {
                 nextBtn.innerText = "下一題 ➔";
             } else {
-                nextBtn.innerText = "🔄 重新挑戰";
-                if (score >= 80) triggerConfetti();
+                nextBtn.innerText = "🏆 查看總成績紀錄";
             }
             nextBtn.classList.remove('hidden');
         }
@@ -1192,13 +1183,44 @@
                 currentQIndex++;
                 renderQuestion();
             } else {
-                currentQIndex = 0;
-                score = 0;
-                renderQuestion();
+                showQuizResult();
             }
         }
 
-        // App Initialization
+        function showQuizResult() {
+            playSFX('correct');
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('quizResultView').classList.remove('hidden');
+
+            document.getElementById('finalScoreText').innerText = `${score} / 100 分`;
+
+            const commentEl = document.getElementById('resultComment');
+            const emojiEl = document.getElementById('resultEmoji');
+
+            if (score === 100) {
+                emojiEl.innerText = "🏆";
+                commentEl.innerText = "🌟 太厲害了！你完全掌握了玻璃畫的單軸對稱與放射均衡概念！";
+                triggerConfetti();
+            } else if (score >= 80) {
+                emojiEl.innerText = "🎉";
+                commentEl.innerText = "👏 非常優秀！你對均衡視覺藝術有很棒的理解！";
+                triggerConfetti();
+            } else if (score >= 60) {
+                emojiEl.innerText = "👍";
+                commentEl.innerText = "😊 及格了！再複習一下對稱軸與中心點的特徵會更棒！";
+            } else {
+                emojiEl.innerText = "💪";
+                commentEl.innerText = "加油！建議回到【視覺分析儀】多觀察經典教堂玻璃畫喔！";
+            }
+        }
+
+        function restartQuiz() {
+            playSFX('click');
+            currentQIndex = 0;
+            score = 0;
+            renderQuestion();
+        }
+
         window.onload = function() {
             updateDraftGrid();
             renderQuestion();
