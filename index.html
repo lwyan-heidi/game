@@ -101,19 +101,34 @@
         <p class="text-indigo-100 text-xs md:text-sm mt-1">小學四年級視覺藝術科 — 玻璃畫均衡概念探索</p>
     </header>
 
+    <!-- Modal Message Box (Replacing alert) -->
+    <div id="msgModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-2xl p-5 max-w-sm w-full shadow-2xl border border-slate-200 text-center animate-bounce-in">
+            <div id="msgModalIcon" class="text-3xl mb-2">⚠️</div>
+            <h3 id="msgModalTitle" class="font-extrabold text-slate-800 text-base mb-2">溫馨提示</h3>
+            <p id="msgModalText" class="text-xs text-slate-600 mb-4 leading-relaxed"></p>
+            <button onclick="closeMsgModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full text-xs shadow transition">
+                明白
+            </button>
+        </div>
+    </div>
+
     <!-- Navigation Tabs -->
     <div class="max-w-4xl mx-auto mt-3 px-2">
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-white p-1.5 rounded-xl shadow border border-slate-200">
-            <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn py-2.5 px-2 rounded-lg font-bold text-xs sm:text-sm transition-all bg-indigo-600 text-white shadow">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 bg-white p-1.5 rounded-xl shadow border border-slate-200">
+            <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn py-2.5 px-1 rounded-lg font-bold text-xs transition-all bg-indigo-600 text-white shadow">
                 🔍 視覺分析儀
             </button>
-            <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn py-2.5 px-2 rounded-lg font-bold text-xs sm:text-sm transition-all text-slate-600 hover:bg-slate-100">
-                ✏️ AI 鏡像畫板
+            <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn py-2.5 px-1 rounded-lg font-bold text-xs transition-all text-slate-600 hover:bg-slate-100">
+                🎨 自由鏡像畫板
             </button>
-            <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn py-2.5 px-2 rounded-lg font-bold text-xs sm:text-sm transition-all text-slate-600 hover:bg-slate-100">
+            <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn py-2.5 px-1 rounded-lg font-bold text-xs transition-all text-slate-600 hover:bg-slate-100">
+                ✍️ iPad 補全工作紙
+            </button>
+            <button onclick="switchTab('tab4')" id="btn-tab4" class="tab-btn py-2.5 px-1 rounded-lg font-bold text-xs transition-all text-slate-600 hover:bg-slate-100">
                 📐 草稿智能診斷
             </button>
-            <button onclick="switchTab('tab4')" id="btn-tab4" class="tab-btn py-2.5 px-2 rounded-lg font-bold text-xs sm:text-sm transition-all text-slate-600 hover:bg-slate-100">
+            <button onclick="switchTab('tab5')" id="btn-tab5" class="tab-btn py-2.5 px-1 rounded-lg font-bold text-xs transition-all text-slate-600 hover:bg-slate-100">
                 ⚡ 30秒挑戰
             </button>
         </div>
@@ -129,7 +144,6 @@
             </h2>
             <p class="text-slate-600 text-xs md:text-sm mb-4">點擊選擇作品，觀賞建築之美，並按下掃描按鈕探索藝術家如何運用「均衡」設計！</p>
 
-            <!-- Church Selector -->
             <div class="mb-4">
                 <label class="block text-xs font-bold text-slate-700 mb-1">選擇教堂作品：</label>
                 <select id="churchSelect" onchange="changeChurch()" class="w-full md:w-auto p-2.5 border-2 border-indigo-200 rounded-lg bg-indigo-50 font-bold text-slate-800 focus:outline-none focus:border-indigo-500 text-sm">
@@ -139,20 +153,17 @@
                 </select>
             </div>
 
-            <!-- Image Viewport -->
             <div class="relative w-full aspect-video max-h-[380px] bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center border-4 border-slate-800 shadow-inner mx-auto">
-                <img id="churchImage" src="1.jpg" class="w-full h-full object-cover" alt="教堂玻璃窗">
+                <img id="churchImage" src="1.jpg" onerror="this.onerror=null; this.src='https://placehold.co/800x450/1e1b4b/ffffff?text=%E8%98%87%E2%A5%B0%E4%B8%96%E5%A4%A7%E6%95%99%E5%A0%82+%E5%BD%A9%E7%B9%AA%E7%8E%BB%E7%90%86';" class="w-full h-full object-cover" alt="教堂玻璃窗">
                 <div id="scanOverlay" class="hidden absolute inset-0 bg-black/20 pointer-events-none"></div>
             </div>
 
-            <!-- Action Button -->
             <div class="mt-4 text-center">
                 <button onclick="startScan()" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition transform active:scale-95 flex items-center gap-2 mx-auto text-sm md:text-base">
                     <span class="text-lg">🚀</span> 啟動 AI 智能掃描
                 </button>
             </div>
 
-            <!-- Knowledge Card -->
             <div id="knowledgeCard" class="mt-4 p-4 rounded-xl bg-amber-50 border-2 border-amber-200 text-slate-800 transition-all">
                 <h3 class="font-bold text-amber-900 text-sm md:text-base flex items-center gap-1.5 mb-2">
                     💡 藝術作品解說與知識點
@@ -165,28 +176,28 @@
             </div>
         </section>
 
-        <!-- ================= TAB 2: AI 鏡像畫板 ================= -->
+        <!-- ================= TAB 2: 自由鏡像畫板 (即時繪製) ================= -->
         <section id="tab2" class="tab-content hidden bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-100">
             <h2 class="text-lg md:text-xl font-bold text-indigo-700 mb-2 flex items-center gap-2">
-                🎨 AI 鏡像畫板
+                🎨 自由鏡像畫板
             </h2>
             <p class="text-slate-600 text-xs md:text-sm mb-3">親手劃下一筆，AI 將自動為你複製對稱圖案。畫錯可用橡皮擦或復原上一步！</p>
 
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3 bg-slate-100 p-2.5 rounded-xl border border-slate-200">
                 <div class="flex items-center gap-1 bg-white p-1 rounded-lg border shadow-sm">
-                    <button id="btn-mode-1" onclick="setMode('1axis')" class="px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white">
+                    <button id="btn-mode-1" onclick="setFreeMode('1axis')" class="px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white">
                         ↔️ 單軸對稱
                     </button>
-                    <button id="btn-mode-8" onclick="setMode('8axis')" class="px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100">
+                    <button id="btn-mode-8" onclick="setFreeMode('8axis')" class="px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100">
                         ❇️ 放射均衡
                     </button>
                 </div>
 
                 <div class="flex items-center gap-1 bg-white p-1 rounded-lg border shadow-sm">
-                    <button id="btn-tool-brush" onclick="setTool('brush')" class="px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white">
+                    <button id="btn-free-brush" onclick="setFreeTool('brush')" class="px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white">
                         ✏️ 畫筆
                     </button>
-                    <button id="btn-tool-eraser" onclick="setTool('eraser')" class="px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100">
+                    <button id="btn-free-eraser" onclick="setFreeTool('eraser')" class="px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100">
                         🧽 橡皮擦
                     </button>
                 </div>
@@ -194,30 +205,29 @@
                 <div class="flex items-center gap-3">
                     <div class="flex items-center gap-1">
                         <label class="text-xs font-bold text-slate-600">顏色:</label>
-                        <input type="color" id="brushColor" value="#3b82f6" class="w-7 h-7 rounded cursor-pointer border-0">
+                        <input type="color" id="freeColor" value="#3b82f6" class="w-7 h-7 rounded cursor-pointer border-0">
                     </div>
                     <div class="flex items-center gap-1">
                         <label class="text-xs font-bold text-slate-600">粗細:</label>
-                        <input type="range" id="brushSize" min="2" max="24" value="6" class="w-16 sm:w-20 accent-indigo-600">
+                        <input type="range" id="freeSize" min="2" max="24" value="6" class="w-16 sm:w-20 accent-indigo-600">
                     </div>
                 </div>
 
                 <div class="flex items-center gap-1.5">
-                    <button onclick="undoCanvas()" class="px-2.5 py-1.5 text-xs font-bold bg-amber-100 text-amber-800 hover:bg-amber-200 rounded-lg transition">
+                    <button onclick="undoFreeCanvas()" class="px-2.5 py-1.5 text-xs font-bold bg-amber-100 text-amber-800 hover:bg-amber-200 rounded-lg transition">
                         ↩️ 復原
                     </button>
-                    <button onclick="clearCanvas()" class="px-2.5 py-1.5 text-xs font-bold bg-red-100 text-red-600 hover:bg-red-200 rounded-lg transition">
+                    <button onclick="clearFreeCanvas()" class="px-2.5 py-1.5 text-xs font-bold bg-red-100 text-red-600 hover:bg-red-200 rounded-lg transition">
                         🗑️ 清除畫板
                     </button>
                 </div>
             </div>
 
-            <!-- 固定 aspect-ratio 與 min-height 確保畫板絕不塌陷 -->
             <div class="canvas-container relative w-full max-w-[480px] mx-auto bg-slate-900 rounded-xl overflow-hidden border-4 border-slate-800 shadow-xl select-none" style="touch-action: none; aspect-ratio: 1 / 1; min-height: 320px;">
-                <canvas id="mirrorCanvas" width="500" height="500" class="absolute inset-0 w-full h-full z-10 cursor-crosshair" style="touch-action: none;"></canvas>
-                <svg id="canvasGrid" class="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 500 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                    <line id="grid1Axis" x1="250" y1="0" x2="250" y2="500" stroke="#ef4444" stroke-dasharray="6 6" stroke-width="2"/>
-                    <g id="grid8Axis" class="hidden">
+                <canvas id="freeCanvas" width="500" height="500" class="absolute inset-0 w-full h-full z-10 cursor-crosshair" style="touch-action: none;"></canvas>
+                <svg class="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 500 500" preserveAspectRatio="none">
+                    <line id="freeGrid1Axis" x1="250" y1="0" x2="250" y2="500" stroke="#ef4444" stroke-dasharray="6 6" stroke-width="2"/>
+                    <g id="freeGrid8Axis" class="hidden">
                         <line x1="0" y1="250" x2="500" y2="250" class="grid-line" />
                         <line x1="250" y1="0" x2="250" y2="500" class="grid-line" />
                         <line x1="0" y1="0" x2="500" y2="500" class="grid-line" />
@@ -228,8 +238,78 @@
             </div>
         </section>
 
-        <!-- ================= TAB 3: 草稿智能診斷 ================= -->
+        <!-- ================= TAB 3: iPad 補全工作紙 (高精度形狀與方位精準比對) ================= -->
         <section id="tab3" class="tab-content hidden bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-100">
+            
+            <!-- Header Task Info -->
+            <div class="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-3.5 mb-3 shadow-sm flex flex-wrap items-center justify-between gap-2">
+                <div>
+                    <h2 id="sheetTitle" class="font-black text-indigo-900 text-sm sm:text-base">
+                        📝 題目一：單軸對稱補全練習
+                    </h2>
+                    <p id="sheetSub" class="text-xs text-indigo-700">右邊已印有黑色圖案。請看著格仔，在左邊畫出對應的對稱圖案！</p>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button id="btnSheetQ1" onclick="switchSheetQ(1)" class="px-3 py-1 text-xs font-bold rounded-lg bg-indigo-600 text-white shadow">
+                        題目一 (單軸對稱)
+                    </button>
+                    <button id="btnSheetQ2" onclick="switchSheetQ(2)" class="px-3 py-1 text-xs font-bold rounded-lg bg-slate-200 text-slate-600 hover:bg-slate-300">
+                        題目二 (放射均衡)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3 bg-slate-100 p-2 rounded-xl border border-slate-200">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-600">筆刷顏色:</span>
+                    <input type="color" id="sheetColor" value="#3b82f6" class="w-7 h-7 rounded cursor-pointer border-0">
+                    <span class="text-xs font-bold text-slate-600 ml-1">粗細:</span>
+                    <input type="range" id="sheetSize" min="3" max="20" value="8" class="w-20 accent-indigo-600">
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="undoSheetCanvas()" class="px-2.5 py-1 text-xs font-bold bg-amber-100 text-amber-800 hover:bg-amber-200 rounded-lg">
+                        ↩️ 復原
+                    </button>
+                    <button onclick="clearSheetCanvas()" class="px-2.5 py-1 text-xs font-bold bg-red-100 text-red-600 hover:bg-red-200 rounded-lg">
+                        🗑️ 重畫此題
+                    </button>
+                </div>
+            </div>
+
+            <!-- Worksheet Grid Canvas -->
+            <div class="canvas-container relative w-full max-w-[460px] mx-auto bg-white rounded-xl overflow-hidden border-4 border-slate-700 shadow-xl select-none" style="touch-action: none; aspect-ratio: 1 / 1; min-height: 320px;">
+                <!-- Grid background & Pre-drawn Question layer -->
+                <canvas id="questionCanvas" width="500" height="500" class="absolute inset-0 w-full h-full z-0 pointer-events-none"></canvas>
+                <!-- Student Drawing Layer (No auto-mirroring) -->
+                <canvas id="studentCanvas" width="500" height="500" class="absolute inset-0 w-full h-full z-10 cursor-crosshair" style="touch-action: none;"></canvas>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-4 text-center">
+                <button onclick="checkSheetAnswer()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold py-3 px-8 rounded-full shadow-lg transition transform active:scale-95 text-sm sm:text-base flex items-center gap-2 mx-auto">
+                    <span>🤖</span> 提交 AI 自動對答案
+                </button>
+            </div>
+
+            <!-- Feedback Result -->
+            <div id="sheetFeedback" class="hidden mt-4 p-4 rounded-xl bg-emerald-50 border-2 border-emerald-300 transition-all text-center">
+                <div class="text-4xl mb-1" id="sheetEmoji">🎉</div>
+                <h3 id="sheetFeedbackTitle" class="font-extrabold text-emerald-900 text-base sm:text-lg mb-1">
+                    恭喜！繪製非常精準！
+                </h3>
+                <p id="sheetFeedbackText" class="text-xs sm:text-sm text-emerald-800 mb-3">
+                    AI 比對結果：正確率 92%！你成功看著格仔補全了圖案！
+                </p>
+                <button id="btnNextSheet" onclick="switchSheetQ(2)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-full shadow transition text-xs sm:text-sm">
+                    挑戰題目二：放射均衡補全 ➔
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= TAB 4: 草稿智能診斷 ================= -->
+        <section id="tab4" class="tab-content hidden bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-100">
             <h2 class="text-lg md:text-xl font-bold text-indigo-700 mb-2 flex items-center gap-2">
                 📐 格仔紙草稿 AI 診斷
             </h2>
@@ -287,7 +367,7 @@
 
             <div class="relative w-full max-w-[450px] mx-auto bg-slate-200 rounded-xl overflow-hidden border-2 border-slate-300 shadow-inner" style="aspect-ratio: 1 / 1; min-height: 300px;">
                 <canvas id="draftCanvas" width="500" height="500" class="w-full h-full object-contain bg-white"></canvas>
-                <svg id="draftOverlay" class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 500 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <svg id="draftOverlay" class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 500 500" preserveAspectRatio="none">
                 </svg>
             </div>
 
@@ -308,14 +388,13 @@
             </div>
         </section>
 
-        <!-- ================= TAB 4: 30秒挑戰 ================= -->
-        <section id="tab4" class="tab-content hidden bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-100">
+        <!-- ================= TAB 5: 30秒挑戰 ================= -->
+        <section id="tab5" class="tab-content hidden bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-100">
             <h2 class="text-lg md:text-xl font-bold text-indigo-700 mb-2 flex items-center gap-2">
                 ⚡ 30秒知識大挑戰
             </h2>
             <p class="text-slate-600 text-xs md:text-sm mb-4">考考你的藝術眼光！選出正確的答案，看看你能拿幾分？</p>
 
-            <!-- 答題區域 -->
             <div id="quizContainer" class="bg-indigo-50/60 p-4 md:p-6 rounded-xl border border-indigo-100">
                 <div class="flex justify-between items-center mb-3">
                     <span id="quizProgress" class="text-xs font-bold bg-indigo-600 text-white px-3 py-1 rounded-full">
@@ -343,12 +422,12 @@
                 </div>
             </div>
 
-            <!-- 成績結算紀錄頁面 (預設隱藏) -->
+            <!-- 成績結算紀錄頁面 -->
             <div id="quizResultView" class="hidden bg-indigo-50/80 p-6 rounded-xl border-2 border-indigo-200 text-center shadow-sm">
                 <div class="text-5xl mb-2" id="resultEmoji">🏆</div>
                 <h3 class="text-xl font-extrabold text-indigo-900 mb-1">挑戰完成！成績紀錄</h3>
                 <p class="text-slate-600 text-xs sm:text-sm mb-4">小學四年級視覺藝術科 — 玻璃畫均衡概念測試</p>
-                
+
                 <div class="bg-white p-4 rounded-2xl border border-indigo-100 max-w-sm mx-auto mb-5 shadow-inner">
                     <div class="text-xs font-bold text-slate-500 mb-1">本次挑戰最終得分</div>
                     <div class="text-4xl font-black text-indigo-600 tracking-wider mb-2" id="finalScoreText">100 / 100 分</div>
@@ -367,7 +446,20 @@
 
     <!-- JavaScript Application Logic -->
     <script>
-        /* ================= WEB AUDIO SFX (零延遲音效) ================= */
+        /* ================= UI MODAL SYSTEM (REPLACING ALERT) ================= */
+        function showMsgModal(title, text, icon = "⚠️") {
+            document.getElementById('msgModalTitle').innerText = title;
+            document.getElementById('msgModalText').innerText = text;
+            document.getElementById('msgModalIcon').innerText = icon;
+            document.getElementById('msgModal').classList.remove('hidden');
+        }
+
+        function closeMsgModal() {
+            playSFX('click');
+            document.getElementById('msgModal').classList.add('hidden');
+        }
+
+        /* ================= WEB AUDIO SFX ================= */
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
 
@@ -431,8 +523,8 @@
             activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow');
             activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
 
-            if (tabId === 'tab2') saveCanvasState();
-            if (tabId === 'tab3' && !draftLoaded) loadPreset('balancedRadial');
+            if (tabId === 'tab3') renderSheetQuestion();
+            if (tabId === 'tab4' && !draftLoaded) loadPreset('balancedRadial');
         }
 
         /* ================= TAB 1: VISUAL ANALYZER ================= */
@@ -440,6 +532,7 @@
             zurich: {
                 name: "蘇黎世大教堂",
                 img: "1.jpg",
+                fallbackImg: "https://placehold.co/800x450/1e1b4b/ffffff?text=%E8%98%87%E2%A5%B0%E4%B8%96%E5%A4%A7%E6%95%99%E5%A0%82+%E5%BD%A9%E7%B9%AA%E7%8E%BB%E7%90%86",
                 type: "symmetry",
                 desc: `
                     <div class="font-bold text-amber-900 text-sm md:text-base mb-1">【單軸對稱】</div>
@@ -454,6 +547,7 @@
             matisse: {
                 name: "馬蒂斯禮拜堂",
                 img: "2.jpeg",
+                fallbackImg: "https://placehold.co/800x450/047857/ffffff?text=%E9%A6%AC%E8%92%82%E6%96%AF%E7%A6 me%E6%8B%9C%E5%A0%82+%E5%BD%A9%E7%B9%AA%E7%8E%BB%E7%90%86",
                 type: "multi-symmetry",
                 desc: `
                     <div class="font-bold text-amber-900 text-sm md:text-base mb-1">【單軸對稱（3組）】</div>
@@ -468,6 +562,7 @@
             sagrada: {
                 name: "聖家族玫瑰窗",
                 img: "3.jpeg",
+                fallbackImg: "https://placehold.co/800x450/b45309/ffffff?text=%E8%81%96%E5%AE%B6%E6%97%8F%E7%8 Rose%E7%AA%97+%E6%94%BE%E5%B0%84%E5%9D%87%E8%A1%A1",
                 type: "radial",
                 desc: `
                     <div class="font-bold text-amber-900 text-sm md:text-base mb-1">【放射均衡】</div>
@@ -485,7 +580,10 @@
             playSFX('click');
             const key = document.getElementById('churchSelect').value;
             const data = churchData[key];
-            document.getElementById('churchImage').src = data.img;
+            const imgEl = document.getElementById('churchImage');
+            imgEl.onerror = () => { imgEl.src = data.fallbackImg; };
+            imgEl.src = data.img;
+
             document.getElementById('scanOverlay').innerHTML = '';
             document.getElementById('scanOverlay').classList.add('hidden');
             document.getElementById('churchDesc').innerHTML = `
@@ -508,7 +606,6 @@
                 line.className = 'scan-line';
                 overlay.appendChild(line);
             } else if (data.type === 'multi-symmetry') {
-                // 針對 2.jpeg 精確對準 3 組窗戶牆面縫隙中央 (20.5%, 50.0%, 79.5%)
                 const positions = [20.5, 50.0, 79.5];
                 positions.forEach(pos => {
                     const line = document.createElement('div');
@@ -519,8 +616,6 @@
             } else {
                 const container = document.createElement('div');
                 container.className = 'radial-scan';
-                
-                // 針對 3.jpeg 精確對準玫瑰窗內圈石環及中央交叉軸心 (X: 53.6%, Y: 49.4%)
                 const centerX = 53.6;
                 const centerY = 49.4;
 
@@ -544,181 +639,382 @@
             document.getElementById('churchDesc').innerHTML = data.desc;
         }
 
-        /* ================= TAB 2: AI MIRROR CANVAS ================= */
-        const canvas = document.getElementById('mirrorCanvas');
-        const ctx = canvas.getContext('2d');
-        let isDrawing = false;
-        let canvasMode = '1axis';
-        let currentTool = 'brush';
-        let lastX = 0, lastY = 0;
-        let undoStack = [];
+        /* ================= TAB 2: FREE MIRROR CANVAS ================= */
+        const freeCanvas = document.getElementById('freeCanvas');
+        const freeCtx = freeCanvas.getContext('2d');
+        let isFreeDrawing = false;
+        let freeMode = '1axis';
+        let freeTool = 'brush';
+        let freeLastX = 0, freeLastY = 0;
+        let freeUndoStack = [];
 
-        function saveCanvasState() {
-            if (undoStack.length >= 10) undoStack.shift();
-            undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+        function saveFreeCanvasState() {
+            if (freeUndoStack.length >= 10) freeUndoStack.shift();
+            freeUndoStack.push(freeCtx.getImageData(0, 0, freeCanvas.width, freeCanvas.height));
         }
 
-        function undoCanvas() {
+        function undoFreeCanvas() {
             playSFX('click');
-            if (undoStack.length > 0) {
-                ctx.putImageData(undoStack.pop(), 0, 0);
-            }
+            if (freeUndoStack.length > 0) freeCtx.putImageData(freeUndoStack.pop(), 0, 0);
         }
 
-        function setMode(mode) {
+        function setFreeMode(mode) {
             playSFX('click');
-            canvasMode = mode;
-            document.getElementById('btn-mode-1').className = mode === '1axis' 
-                ? 'px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white'
-                : 'px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100';
-            document.getElementById('btn-mode-8').className = mode === '8axis' 
-                ? 'px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white'
-                : 'px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100';
-
-            document.getElementById('grid1Axis').style.display = mode === '1axis' ? 'block' : 'none';
-            document.getElementById('grid8Axis').style.display = mode === '8axis' ? 'block' : 'none';
+            freeMode = mode;
+            document.getElementById('btn-mode-1').className = mode === '1axis' ? 'px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white' : 'px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100';
+            document.getElementById('btn-mode-8').className = mode === '8axis' ? 'px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white' : 'px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100';
+            document.getElementById('freeGrid1Axis').style.display = mode === '1axis' ? 'block' : 'none';
+            document.getElementById('freeGrid8Axis').style.display = mode === '8axis' ? 'block' : 'none';
         }
 
-        function setTool(tool) {
+        function setFreeTool(tool) {
             playSFX('click');
-            currentTool = tool;
-            document.getElementById('btn-tool-brush').className = tool === 'brush'
-                ? 'px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white'
-                : 'px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100';
-            document.getElementById('btn-tool-eraser').className = tool === 'eraser'
-                ? 'px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white'
-                : 'px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100';
+            freeTool = tool;
+            document.getElementById('btn-free-brush').className = tool === 'brush' ? 'px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white' : 'px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100';
+            document.getElementById('btn-free-eraser').className = tool === 'eraser' ? 'px-2.5 py-1.5 text-xs font-bold rounded bg-indigo-600 text-white' : 'px-2.5 py-1.5 text-xs font-bold rounded text-slate-600 hover:bg-slate-100';
         }
 
-        function clearCanvas() {
+        function clearFreeCanvas() {
             playSFX('click');
-            saveCanvasState();
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            saveFreeCanvasState();
+            freeCtx.clearRect(0, 0, freeCanvas.width, freeCanvas.height);
         }
 
-        function getCanvasCoords(e) {
-            const rect = canvas.getBoundingClientRect();
-            let clientX, clientY;
-
+        function getCanvasCoords(c, e) {
+            const rect = c.getBoundingClientRect();
+            let clientX = e.clientX, clientY = e.clientY;
             if (e.touches && e.touches.length > 0) {
                 clientX = e.touches[0].clientX;
                 clientY = e.touches[0].clientY;
-            } else if (e.changedTouches && e.changedTouches.length > 0) {
-                clientX = e.changedTouches[0].clientX;
-                clientY = e.changedTouches[0].clientY;
-            } else {
-                clientX = e.clientX;
-                clientY = e.clientY;
             }
-
             return {
-                x: (clientX - rect.left) * (canvas.width / rect.width),
-                y: (clientY - rect.top) * (canvas.height / rect.height)
+                x: (clientX - rect.left) * (c.width / rect.width),
+                y: (clientY - rect.top) * (c.height / rect.height)
             };
         }
 
-        function startDrawing(e) {
-            saveCanvasState();
-            isDrawing = true;
-            const pos = getCanvasCoords(e);
-            lastX = pos.x;
-            lastY = pos.y;
-            drawSegment(pos.x, pos.y, pos.x, pos.y);
-        }
+        function drawFreeSegment(x1, y1, x2, y2) {
+            const color = document.getElementById('freeColor').value;
+            const size = document.getElementById('freeSize').value;
 
-        function draw(e) {
-            if (!isDrawing) return;
-            const pos = getCanvasCoords(e);
-            drawSegment(lastX, lastY, pos.x, pos.y);
-            lastX = pos.x;
-            lastY = pos.y;
-        }
+            freeCtx.save();
+            freeCtx.lineWidth = size;
+            freeCtx.lineCap = 'round';
+            freeCtx.lineJoin = 'round';
 
-        function stopDrawing() {
-            isDrawing = false;
-        }
-
-        function drawSegment(x1, y1, x2, y2) {
-            const color = document.getElementById('brushColor').value;
-            const size = document.getElementById('brushSize').value;
-
-            ctx.save();
-            ctx.lineWidth = size;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-
-            if (currentTool === 'eraser') {
-                ctx.globalCompositeOperation = 'destination-out';
+            if (freeTool === 'eraser') {
+                freeCtx.globalCompositeOperation = 'destination-out';
             } else {
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.strokeStyle = color;
+                freeCtx.globalCompositeOperation = 'source-over';
+                freeCtx.strokeStyle = color;
             }
 
-            const CX = canvas.width / 2;
-            const CY = canvas.height / 2;
+            const CX = freeCanvas.width / 2, CY = freeCanvas.height / 2;
 
-            if (canvasMode === '1axis') {
-                strokeLine(x1, y1, x2, y2);
-                strokeLine(2 * CX - x1, y1, 2 * CX - x2, y2);
-            } else if (canvasMode === '8axis') {
+            if (freeMode === '1axis') {
+                freeCtx.beginPath(); freeCtx.moveTo(x1, y1); freeCtx.lineTo(x2, y2); freeCtx.stroke();
+                freeCtx.beginPath(); freeCtx.moveTo(2 * CX - x1, y1); freeCtx.lineTo(2 * CX - x2, y2); freeCtx.stroke();
+            } else {
                 for (let i = 0; i < 4; i++) {
                     const angle = (i * Math.PI) / 2;
-                    
-                    ctx.save();
-                    ctx.translate(CX, CY);
-                    ctx.rotate(angle);
-                    ctx.beginPath();
-                    ctx.moveTo(x1 - CX, y1 - CY);
-                    ctx.lineTo(x2 - CX, y2 - CY);
-                    ctx.stroke();
-                    ctx.restore();
-
-                    ctx.save();
-                    ctx.translate(CX, CY);
-                    ctx.rotate(angle);
-                    ctx.scale(-1, 1);
-                    ctx.beginPath();
-                    ctx.moveTo(x1 - CX, y1 - CY);
-                    ctx.lineTo(x2 - CX, y2 - CY);
-                    ctx.stroke();
-                    ctx.restore();
+                    freeCtx.save(); freeCtx.translate(CX, CY); freeCtx.rotate(angle);
+                    freeCtx.beginPath(); freeCtx.moveTo(x1 - CX, y1 - CY); freeCtx.lineTo(x2 - CX, y2 - CY); freeCtx.stroke(); freeCtx.restore();
+                    freeCtx.save(); freeCtx.translate(CX, CY); freeCtx.rotate(angle); freeCtx.scale(-1, 1);
+                    freeCtx.beginPath(); freeCtx.moveTo(x1 - CX, y1 - CY); freeCtx.lineTo(x2 - CX, y2 - CY); freeCtx.stroke(); freeCtx.restore();
                 }
             }
-            ctx.restore();
+            freeCtx.restore();
         }
 
-        function strokeLine(x1, y1, x2, y2) {
-            ctx.beginPath();
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
-            ctx.stroke();
+        freeCanvas.addEventListener('pointerdown', (e) => { e.preventDefault(); saveFreeCanvasState(); isFreeDrawing = true; const p = getCanvasCoords(freeCanvas, e); freeLastX = p.x; freeLastY = p.y; drawFreeSegment(p.x, p.y, p.x, p.y); });
+        freeCanvas.addEventListener('pointermove', (e) => { e.preventDefault(); if (isFreeDrawing) { const p = getCanvasCoords(freeCanvas, e); drawFreeSegment(freeLastX, freeLastY, p.x, p.y); freeLastX = p.x; freeLastY = p.y; } });
+        freeCanvas.addEventListener('pointerup', () => { isFreeDrawing = false; });
+
+        /* ================= TAB 3: iPad 補全工作紙 (高精度形狀軌跡 + 8折放射方位 AI 批改) ================= */
+        const qCanvas = document.getElementById('questionCanvas');
+        const qCtx = qCanvas.getContext('2d');
+        const sCanvas = document.getElementById('studentCanvas');
+        const sCtx = sCanvas.getContext('2d');
+
+        let currentSheetQ = 1;
+        let isStudentDrawing = false;
+        let sheetLastX = 0, sheetLastY = 0;
+        let sheetUndoStack = [];
+
+        function renderSheetQuestion() {
+            qCtx.clearRect(0, 0, qCanvas.width, qCanvas.height);
+            
+            // 繪製格仔紙網格 (32x32px 格仔)
+            qCtx.strokeStyle = "#cbd5e1";
+            qCtx.lineWidth = 1;
+            for (let x = 0; x <= qCanvas.width; x += 32) {
+                qCtx.beginPath(); qCtx.moveTo(x, 0); qCtx.lineTo(x, qCanvas.height); qCtx.stroke();
+            }
+            for (let y = 0; y <= qCanvas.height; y += 32) {
+                qCtx.beginPath(); qCtx.moveTo(0, y); qCtx.lineTo(qCanvas.width, y); qCtx.stroke();
+            }
+
+            if (currentSheetQ === 1) {
+                // 題目一：單軸對稱 (紅色垂直對稱軸)
+                qCtx.strokeStyle = "#ef4444";
+                qCtx.lineWidth = 3;
+                qCtx.setLineDash([8, 8]);
+                qCtx.beginPath(); qCtx.moveTo(250, 0); qCtx.lineTo(250, 500); qCtx.stroke();
+                qCtx.setLineDash([]);
+
+                // 右邊印上題目圖案（圓心: X=378, Y=250, 半徑=64）
+                qCtx.strokeStyle = "#0f172a";
+                qCtx.lineWidth = 6;
+                qCtx.beginPath();
+                qCtx.arc(378, 250, 64, 0, Math.PI * 2);
+                qCtx.stroke();
+
+                // 標示說明文字
+                qCtx.fillStyle = "#ef4444";
+                qCtx.font = "bold 14px sans-serif";
+                qCtx.fillText("對稱軸", 258, 24);
+                qCtx.fillStyle = "#64748b";
+                qCtx.fillText("【題目圖案】", 340, 150);
+                qCtx.fillText("👈 請在左邊畫出對稱圖案", 30, 150);
+
+            } else {
+                // 題目二：8折放射均衡網格 (灰色虛線與中心點)
+                qCtx.strokeStyle = "#94a3b8";
+                qCtx.lineWidth = 1.5;
+                qCtx.setLineDash([4, 4]);
+                
+                // 十字線與斜線
+                qCtx.beginPath(); qCtx.moveTo(0, 250); qCtx.lineTo(500, 250); qCtx.stroke();
+                qCtx.beginPath(); qCtx.moveTo(250, 0); qCtx.lineTo(250, 500); qCtx.stroke();
+                qCtx.beginPath(); qCtx.moveTo(0, 0); qCtx.lineTo(500, 500); qCtx.stroke();
+                qCtx.beginPath(); qCtx.moveTo(0, 500); qCtx.lineTo(500, 0); qCtx.stroke();
+                qCtx.setLineDash([]);
+
+                // 中心黑色點
+                qCtx.fillStyle = "#0f172a";
+                qCtx.beginPath(); qCtx.arc(250, 250, 7, 0, Math.PI * 2); qCtx.fill();
+
+                // 預印 4 個對角花瓣 (右上、右下、左下、左上)
+                qCtx.strokeStyle = "#0f172a";
+                qCtx.lineWidth = 5;
+
+                drawPetalOnCtx(qCtx, 250, 250, 110, -Math.PI / 4, "#0f172a");     // 右上 (-45°)
+                drawPetalOnCtx(qCtx, 250, 250, 110, Math.PI / 4, "#0f172a");      // 右下 (45°)
+                drawPetalOnCtx(qCtx, 250, 250, 110, (3 * Math.PI) / 4, "#0f172a"); // 左下 (135°)
+                drawPetalOnCtx(qCtx, 250, 250, 110, (-3 * Math.PI) / 4, "#0f172a");// 左上 (-135°)
+
+                // 標示說明文字
+                qCtx.fillStyle = "#f59e0b";
+                qCtx.font = "bold 13px sans-serif";
+                qCtx.fillText("中心點", 260, 245);
+                qCtx.fillStyle = "#64748b";
+                qCtx.font = "bold 13px sans-serif";
+                qCtx.fillText("【已預印 4 個對角花瓣】", 300, 120);
+                qCtx.fillText("👈 請圍繞中心點補全上下左右 4 個方向的花瓣", 30, 480);
+            }
         }
 
-        canvas.style.touchAction = 'none';
+        function switchSheetQ(qNum) {
+            playSFX('click');
+            currentSheetQ = qNum;
+            document.getElementById('btnSheetQ1').className = qNum === 1 ? "px-3 py-1 text-xs font-bold rounded-lg bg-indigo-600 text-white shadow" : "px-3 py-1 text-xs font-bold rounded-lg bg-slate-200 text-slate-600 hover:bg-slate-300";
+            document.getElementById('btnSheetQ2').className = qNum === 2 ? "px-3 py-1 text-xs font-bold rounded-lg bg-indigo-600 text-white shadow" : "px-3 py-1 text-xs font-bold rounded-lg bg-slate-200 text-slate-600 hover:bg-slate-300";
 
-        canvas.addEventListener('pointerdown', (e) => {
-            e.preventDefault();
-            try { canvas.setPointerCapture(e.pointerId); } catch(err){}
-            startDrawing(e);
-        });
-        canvas.addEventListener('pointermove', (e) => {
-            e.preventDefault();
-            if (isDrawing) draw(e);
-        });
-        canvas.addEventListener('pointerup', (e) => {
-            e.preventDefault();
-            try { canvas.releasePointerCapture(e.pointerId); } catch(err){}
-            stopDrawing();
-        });
-        canvas.addEventListener('pointercancel', (e) => {
-            stopDrawing();
-        });
+            if (qNum === 1) {
+                document.getElementById('sheetTitle').innerText = "📝 題目一：單軸對稱補全練習";
+                document.getElementById('sheetSub').innerText = "右邊已印有黑色圖案。請看著格仔，在左邊畫出對應的對稱圖案！";
+            } else {
+                document.getElementById('sheetTitle').innerText = "📝 題目二：放射均衡補全練習";
+                document.getElementById('sheetSub').innerText = "圖中已印有 4 個對角花瓣。請圍繞【中心點】，在上下左右（正向）方向畫出其餘 4 個放射花瓣！";
+            }
 
-        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); }, { passive: false });
-        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); }, { passive: false });
-        canvas.addEventListener('touchend', (e) => { e.preventDefault(); stopDrawing(); }, { passive: false });
+            clearSheetCanvas();
+            renderSheetQuestion();
+            document.getElementById('sheetFeedback').classList.add('hidden');
+        }
 
-        /* ================= TAB 3: DRAFT SMART DIAGNOSIS ================= */
+        function saveSheetCanvasState() {
+            if (sheetUndoStack.length >= 10) sheetUndoStack.shift();
+            sheetUndoStack.push(sCtx.getImageData(0, 0, sCanvas.width, sCanvas.height));
+        }
+
+        function undoSheetCanvas() {
+            playSFX('click');
+            if (sheetUndoStack.length > 0) sCtx.putImageData(sheetUndoStack.pop(), 0, 0);
+        }
+
+        function clearSheetCanvas() {
+            playSFX('click');
+            saveSheetCanvasState();
+            sCtx.clearRect(0, 0, sCanvas.width, sCanvas.height);
+            document.getElementById('sheetFeedback').classList.add('hidden');
+        }
+
+        function drawStudentSegment(x1, y1, x2, y2) {
+            const color = document.getElementById('sheetColor').value;
+            const size = document.getElementById('sheetSize').value;
+
+            sCtx.save();
+            sCtx.lineWidth = size;
+            sCtx.lineCap = 'round';
+            sCtx.lineJoin = 'round';
+            sCtx.strokeStyle = color;
+
+            sCtx.beginPath();
+            sCtx.moveTo(x1, y1);
+            sCtx.lineTo(x2, y2);
+            sCtx.stroke();
+            sCtx.restore();
+        }
+
+        sCanvas.addEventListener('pointerdown', (e) => { e.preventDefault(); saveSheetCanvasState(); isStudentDrawing = true; const p = getCanvasCoords(sCanvas, e); sheetLastX = p.x; sheetLastY = p.y; drawStudentSegment(p.x, p.y, p.x, p.y); });
+        sCanvas.addEventListener('pointermove', (e) => { e.preventDefault(); if (isStudentDrawing) { const p = getCanvasCoords(sCanvas, e); drawStudentSegment(sheetLastX, sheetLastY, p.x, p.y); sheetLastX = p.x; sheetLastY = p.y; } });
+        sCanvas.addEventListener('pointerup', () => { isStudentDrawing = false; });
+
+        /* 🤖 精準 AI 批改對答案算法 (形狀軌跡 + 8折放射方位檢驗) */
+        function checkSheetAnswer() {
+            playSFX('scan');
+
+            const sImgData = sCtx.getImageData(0, 0, sCanvas.width, sCanvas.height);
+            const pixels = sImgData.data;
+
+            let totalStudentPixels = 0;
+            let validTargetPixels = 0;
+            let octantHits = [0, 0, 0, 0, 0, 0, 0, 0];
+
+            const feedbackCard = document.getElementById('sheetFeedback');
+            const emojiEl = document.getElementById('sheetEmoji');
+            const titleEl = document.getElementById('sheetFeedbackTitle');
+            const textEl = document.getElementById('sheetFeedbackText');
+            const btnEl = document.getElementById('btnNextSheet');
+
+            feedbackCard.classList.remove('hidden');
+
+            if (currentSheetQ === 1) {
+                // 【題目一：單軸對稱圓形精準比對】
+                const targetCX = 122;
+                const targetCY = 250;
+                const targetR = 64;
+                const tolerance = 18;
+
+                for (let y = 0; y < sCanvas.height; y++) {
+                    for (let x = 0; x < sCanvas.width; x++) {
+                        const idx = (y * sCanvas.width + x) * 4;
+                        if (pixels[idx + 3] > 30) {
+                            totalStudentPixels++;
+                            const dx = x - targetCX;
+                            const dy = y - targetCY;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+
+                            if (Math.abs(dist - targetR) <= tolerance) {
+                                validTargetPixels++;
+                                let angle = Math.atan2(dy, dx);
+                                if (angle < 0) angle += Math.PI * 2;
+                                const octant = Math.floor((angle / (Math.PI * 2)) * 8) % 8;
+                                octantHits[octant]++;
+                            }
+                        }
+                    }
+                }
+
+                if (totalStudentPixels < 80) {
+                    playSFX('wrong');
+                    feedbackCard.classList.add('hidden');
+                    showMsgModal("尚未完成作答", "請先看著格仔，用畫筆在左邊畫出對應的圓形圖案再點擊對答案喔！", "✏️");
+                    return;
+                }
+
+                const precision = validTargetPixels / totalStudentPixels;
+                const coveredOctants = octantHits.filter(count => count > 5).length;
+                const coverage = coveredOctants / 8;
+                const finalScore = Math.round(precision * coverage * 100);
+
+                if (precision >= 0.60 && coverage >= 0.60) {
+                    playSFX('correct');
+                    triggerConfetti();
+                    feedbackCard.className = "mt-4 p-4 rounded-xl bg-emerald-50 border-2 border-emerald-300 transition-all text-center";
+                    emojiEl.innerText = "🎉";
+                    titleEl.innerText = "🌟 題目一批改：完美單軸對稱！";
+                    textEl.innerHTML = `<b>對稱精準度：${Math.max(finalScore, 85)}%！</b> 你精準看懂了格仔數量，在左側完美畫出了圓形鏡像！`;
+                    btnEl.innerText = "進入題目二：放射均衡補全 ➔";
+                    btnEl.onclick = () => switchSheetQ(2);
+                } else {
+                    playSFX('wrong');
+                    feedbackCard.className = "mt-4 p-4 rounded-xl bg-red-50 border-2 border-red-300 transition-all text-center";
+                    emojiEl.innerText = "❌";
+                    titleEl.innerText = "批改不通過：形狀或位置不正確";
+
+                    let tip = precision < 0.5 
+                        ? "你畫的形狀不是圓形（或位置偏離太遠）喔！請看著右邊的圓形與對稱軸距離重新劃一個圓形。" 
+                        : "圓形畫得不夠完整！請把整個圓形的輪廓畫齊全喔。";
+
+                    textEl.innerHTML = `<span class="text-red-700 font-bold">${tip}</span>`;
+                    btnEl.innerText = "🗑️ 清除重畫此題";
+                    btnEl.onclick = () => clearSheetCanvas();
+                }
+
+            } else {
+                // 【題目二：4 正向放射花瓣精準比對】
+                const targetCX = 250;
+                const targetCY = 250;
+                let validRadialPixels = 0;
+                let angleSectorHits = new Array(8).fill(0);
+
+                for (let y = 0; y < sCanvas.height; y++) {
+                    for (let x = 0; x < sCanvas.width; x++) {
+                        const idx = (y * sCanvas.width + x) * 4;
+                        if (pixels[idx + 3] > 30) {
+                            totalStudentPixels++;
+                            const dx = x - targetCX;
+                            const dy = y - targetCY;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+
+                            if (dist >= 20 && dist <= 140) {
+                                let angle = Math.atan2(dy, dx);
+                                if (angle < 0) angle += Math.PI * 2;
+                                // Sector 0: Right, Sector 1: Down-Right, Sector 2: Down, Sector 3: Down-Left, Sector 4: Left, Sector 5: Up-Left, Sector 6: Up, Sector 7: Up-Right
+                                const sector = Math.floor(((angle + Math.PI / 8) % (Math.PI * 2)) / (Math.PI / 4));
+                                angleSectorHits[sector]++;
+                                validRadialPixels++;
+                            }
+                        }
+                    }
+                }
+
+                if (totalStudentPixels < 80) {
+                    playSFX('wrong');
+                    feedbackCard.classList.add('hidden');
+                    showMsgModal("尚未完成作答", "請先圍繞中心點畫出上下左右方向的花瓣再點擊對答案喔！", "🌸");
+                    return;
+                }
+
+                // 檢查學生是否補全了 0, 2, 4, 6（右、下、左、上）這 4 個缺失的正向扇區
+                const requiredSectors = [0, 2, 4, 6];
+                const coveredRequiredSectors = requiredSectors.filter(sec => angleSectorHits[sec] > 15).length;
+                const precision = validRadialPixels / totalStudentPixels;
+
+                if (coveredRequiredSectors >= 3 && precision >= 0.50) {
+                    playSFX('correct');
+                    triggerConfetti();
+                    feedbackCard.className = "mt-4 p-4 rounded-xl bg-emerald-50 border-2 border-emerald-300 transition-all text-center";
+                    emojiEl.innerText = "🏆";
+                    titleEl.innerText = "✨ 恭喜完成全部 iPad 補全工作紙！";
+                    textEl.innerHTML = `<b>放射正確率：${Math.round((coveredRequiredSectors / 4) * 100)}%！</b> 你成功圍繞中心點補全了剩餘 4 個正向（上下左右）的花瓣！`;
+                    btnEl.innerText = "🔄 重新練習題目一";
+                    btnEl.onclick = () => switchSheetQ(1);
+                } else {
+                    playSFX('wrong');
+                    feedbackCard.className = "mt-4 p-4 rounded-xl bg-red-50 border-2 border-red-300 transition-all text-center";
+                    emojiEl.innerText = "❌";
+                    titleEl.innerText = "批改不通過：放射花瓣未齊全";
+                    textEl.innerHTML = "<b>放射正確率未達標！</b> 請圍繞<b>【中心點】</b>在正上、正下、正左、正右 4 個方向都畫上對應的花瓣喔！";
+                    btnEl.innerText = "🗑️ 清除重畫此題";
+                    btnEl.onclick = () => clearSheetCanvas();
+                }
+            }
+        }
+
+        /* ================= TAB 4: DRAFT SMART DIAGNOSIS ================= */
         const draftCanvas = document.getElementById('draftCanvas');
         const draftCtx = draftCanvas.getContext('2d');
         let draftLoaded = false;
@@ -727,19 +1023,8 @@
             draftCtx.save();
             draftCtx.strokeStyle = "#cbd5e1";
             draftCtx.lineWidth = 1;
-            
-            for (let x = 0; x <= draftCanvas.width; x += 25) {
-                draftCtx.beginPath();
-                draftCtx.moveTo(x, 0);
-                draftCtx.lineTo(x, draftCanvas.height);
-                draftCtx.stroke();
-            }
-            for (let y = 0; y <= draftCanvas.height; y += 25) {
-                draftCtx.beginPath();
-                draftCtx.moveTo(0, y);
-                draftCtx.lineTo(draftCanvas.width, y);
-                draftCtx.stroke();
-            }
+            for (let x = 0; x <= draftCanvas.width; x += 25) { draftCtx.beginPath(); draftCtx.moveTo(x, 0); draftCtx.lineTo(x, draftCanvas.height); draftCtx.stroke(); }
+            for (let y = 0; y <= draftCanvas.height; y += 25) { draftCtx.beginPath(); draftCtx.moveTo(0, y); draftCtx.lineTo(draftCanvas.width, y); draftCtx.stroke(); }
             draftCtx.restore();
         }
 
@@ -748,55 +1033,30 @@
             const overlay = document.getElementById('draftOverlay');
             
             if (type === 'symmetry') {
-                overlay.innerHTML = `
-                    <line x1="250" y1="0" x2="250" y2="500" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 6"/>
-                    <rect x="10" y="10" width="85" height="26" fill="#ef4444" rx="4" opacity="0.85"/>
-                    <text x="52" y="27" fill="white" font-size="12" font-weight="bold" text-anchor="middle">左半邊</text>
-                    <rect x="405" y="10" width="85" height="26" fill="#3b82f6" rx="4" opacity="0.85"/>
-                    <text x="447" y="27" fill="white" font-size="12" font-weight="bold" text-anchor="middle">右半邊</text>
-                `;
+                overlay.innerHTML = `<line x1="250" y1="0" x2="250" y2="500" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 6"/><rect x="10" y="10" width="85" height="26" fill="#ef4444" rx="4" opacity="0.85"/><text x="52" y="27" fill="white" font-size="12" font-weight="bold" text-anchor="middle">左半邊</text><rect x="405" y="10" width="85" height="26" fill="#3b82f6" rx="4" opacity="0.85"/><text x="447" y="27" fill="white" font-size="12" font-weight="bold" text-anchor="middle">右半邊</text>`;
             } else if (type === 'radial') {
-                overlay.innerHTML = `
-                    <line x1="0" y1="250" x2="500" y2="250" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 4"/>
-                    <line x1="250" y1="0" x2="250" y2="500" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 4"/>
-                    <line x1="0" y1="0" x2="500" y2="500" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/>
-                    <line x1="0" y1="500" x2="500" y2="0" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/>
-                    <circle cx="250" cy="250" r="8" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
-                    <text x="250" y="232" fill="#f59e0b" font-size="12" font-weight="bold" text-anchor="middle">【中心點】</text>
-                `;
+                overlay.innerHTML = `<line x1="0" y1="250" x2="500" y2="250" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 4"/><line x1="250" y1="0" x2="250" y2="500" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 4"/><line x1="0" y1="0" x2="500" y2="500" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/><line x1="0" y1="500" x2="500" y2="0" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4"/><circle cx="250" cy="250" r="8" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/><text x="250" y="232" fill="#f59e0b" font-size="12" font-weight="bold" text-anchor="middle">【中心點】</text>`;
             } else if (type === 'hybrid') {
-                overlay.innerHTML = `
-                    <line x1="250" y1="0" x2="250" y2="500" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 6"/>
-                    <line x1="0" y1="250" x2="500" y2="250" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3 3"/>
-                    <line x1="0" y1="0" x2="500" y2="500" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3"/>
-                    <line x1="0" y1="500" x2="500" y2="0" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3"/>
-                    <circle cx="250" cy="250" r="8" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
-
-                    <rect x="10" y="10" width="130" height="24" fill="#8b5cf6" rx="4" opacity="0.9"/>
-                    <text x="75" y="26" fill="white" font-size="11" font-weight="bold" text-anchor="middle">🔀 對稱 + 放射雙網格</text>
-                `;
+                overlay.innerHTML = `<line x1="250" y1="0" x2="250" y2="500" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 6"/><line x1="0" y1="250" x2="500" y2="250" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3 3"/><line x1="0" y1="0" x2="500" y2="500" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3"/><line x1="0" y1="500" x2="500" y2="0" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3"/><circle cx="250" cy="250" r="8" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/><rect x="10" y="10" width="130" height="24" fill="#8b5cf6" rx="4" opacity="0.9"/><text x="75" y="26" fill="white" font-size="11" font-weight="bold" text-anchor="middle">🔀 對稱 + 放射雙網格</text>`;
             }
         }
 
-        function drawPetal(cx, cy, radius, angle, color) {
-            draftCtx.save();
-            draftCtx.translate(cx, cy);
-            draftCtx.rotate(angle);
-
-            draftCtx.strokeStyle = color;
-            draftCtx.lineWidth = 4;
-            draftCtx.beginPath();
-            draftCtx.moveTo(0, 0);
-            draftCtx.quadraticCurveTo(20, radius / 2, 0, radius);
-            draftCtx.quadraticCurveTo(-20, radius / 2, 0, 0);
-            draftCtx.stroke();
-
-            draftCtx.fillStyle = color;
-            draftCtx.beginPath();
-            draftCtx.arc(0, radius + 10, 5, 0, Math.PI * 2);
-            draftCtx.fill();
-
-            draftCtx.restore();
+        function drawPetalOnCtx(targetCtx, cx, cy, radius, angle, color) {
+            targetCtx.save();
+            targetCtx.translate(cx, cy);
+            targetCtx.rotate(angle);
+            targetCtx.strokeStyle = color;
+            targetCtx.lineWidth = 4;
+            targetCtx.beginPath();
+            targetCtx.moveTo(0, 0);
+            targetCtx.quadraticCurveTo(24, radius / 2, 0, radius);
+            targetCtx.quadraticCurveTo(-24, radius / 2, 0, 0);
+            targetCtx.stroke();
+            targetCtx.fillStyle = color;
+            targetCtx.beginPath();
+            targetCtx.arc(0, radius + 8, 4, 0, Math.PI * 2);
+            targetCtx.fill();
+            targetCtx.restore();
         }
 
         function loadPreset(mode) {
@@ -804,81 +1064,32 @@
             draftCtx.fillStyle = "#ffffff";
             draftCtx.fillRect(0, 0, draftCanvas.width, draftCanvas.height);
             drawBlackGridBackground();
-
             const cx = 250, cy = 250;
 
             if (mode === 'balancedSymmetry') {
                 document.querySelector('input[value="symmetry"]').checked = true;
-                draftCtx.strokeStyle = "#1e1b4b";
-                draftCtx.lineWidth = 4;
-                
-                draftCtx.beginPath();
-                draftCtx.arc(150, 250, 50, 0, Math.PI * 2);
-                draftCtx.stroke();
-                draftCtx.strokeRect(100, 120, 100, 260);
-
-                draftCtx.beginPath();
-                draftCtx.arc(350, 250, 50, 0, Math.PI * 2);
-                draftCtx.stroke();
-                draftCtx.strokeRect(300, 120, 100, 260);
-
+                draftCtx.strokeStyle = "#1e1b4b"; draftCtx.lineWidth = 4;
+                draftCtx.beginPath(); draftCtx.arc(150, 250, 50, 0, Math.PI * 2); draftCtx.stroke(); draftCtx.strokeRect(100, 120, 100, 260);
+                draftCtx.beginPath(); draftCtx.arc(350, 250, 50, 0, Math.PI * 2); draftCtx.stroke(); draftCtx.strokeRect(300, 120, 100, 260);
             } else if (mode === 'imbalancedSymmetry') {
                 document.querySelector('input[value="symmetry"]').checked = true;
-                draftCtx.strokeStyle = "#1e1b4b";
-                draftCtx.lineWidth = 4;
-
-                draftCtx.beginPath();
-                draftCtx.arc(130, 250, 60, 0, Math.PI * 2);
-                draftCtx.stroke();
-                draftCtx.fillRect(80, 180, 110, 140);
-
-                draftCtx.beginPath();
-                draftCtx.arc(370, 250, 22, 0, Math.PI * 2);
-                draftCtx.stroke();
-
+                draftCtx.strokeStyle = "#1e1b4b"; draftCtx.lineWidth = 4;
+                draftCtx.beginPath(); draftCtx.arc(130, 250, 60, 0, Math.PI * 2); draftCtx.stroke(); draftCtx.fillRect(80, 180, 110, 140);
+                draftCtx.beginPath(); draftCtx.arc(370, 250, 22, 0, Math.PI * 2); draftCtx.stroke();
             } else if (mode === 'balancedRadial') {
                 document.querySelector('input[value="radial"]').checked = true;
-                for (let i = 0; i < 8; i++) {
-                    const angle = (i * Math.PI) / 4;
-                    drawPetal(cx, cy, 100, angle, "#1e1b4b");
-                }
-                draftCtx.strokeStyle = "#312e81";
-                draftCtx.lineWidth = 3;
-                draftCtx.beginPath();
-                draftCtx.arc(cx, cy, 35, 0, Math.PI * 2);
-                draftCtx.stroke();
-
+                for (let i = 0; i < 8; i++) drawPetalOnCtx(draftCtx, cx, cy, 100, (i * Math.PI) / 4, "#1e1b4b");
+                draftCtx.strokeStyle = "#312e81"; draftCtx.lineWidth = 3; draftCtx.beginPath(); draftCtx.arc(cx, cy, 35, 0, Math.PI * 2); draftCtx.stroke();
             } else if (mode === 'imbalancedRadial') {
                 document.querySelector('input[value="radial"]').checked = true;
-                for (let i = 0; i < 5; i++) {
-                    const angle = (i * Math.PI) / 4;
-                    drawPetal(cx, cy, 100, angle, "#1e1b4b");
-                }
+                for (let i = 0; i < 5; i++) drawPetalOnCtx(draftCtx, cx, cy, 100, (i * Math.PI) / 4, "#1e1b4b");
             } else if (mode === 'balancedHybrid') {
                 document.querySelector('input[value="hybrid"]').checked = true;
-                
-                for (let i = 0; i < 8; i++) {
-                    const angle = (i * Math.PI) / 4;
-                    drawPetal(cx, 120, 55, angle, "#1e1b4b");
-                }
-                draftCtx.strokeStyle = "#312e81";
-                draftCtx.lineWidth = 2.5;
-                draftCtx.beginPath();
-                draftCtx.arc(cx, 120, 22, 0, Math.PI * 2);
-                draftCtx.stroke();
-
-                draftCtx.strokeStyle = "#1e1b4b";
-                draftCtx.lineWidth = 3.5;
-                
-                draftCtx.beginPath();
-                draftCtx.arc(150, 320, 45, 0, Math.PI * 2);
-                draftCtx.stroke();
-                draftCtx.strokeRect(110, 260, 80, 170);
-
-                draftCtx.beginPath();
-                draftCtx.arc(350, 320, 45, 0, Math.PI * 2);
-                draftCtx.stroke();
-                draftCtx.strokeRect(310, 260, 80, 170);
+                for (let i = 0; i < 8; i++) drawPetalOnCtx(draftCtx, cx, 120, 55, (i * Math.PI) / 4, "#1e1b4b");
+                draftCtx.strokeStyle = "#312e81"; draftCtx.lineWidth = 2.5; draftCtx.beginPath(); draftCtx.arc(cx, 120, 22, 0, Math.PI * 2); draftCtx.stroke();
+                draftCtx.strokeStyle = "#1e1b4b"; draftCtx.lineWidth = 3.5;
+                draftCtx.beginPath(); draftCtx.arc(150, 320, 45, 0, Math.PI * 2); draftCtx.stroke(); draftCtx.strokeRect(110, 260, 80, 170);
+                draftCtx.beginPath(); draftCtx.arc(350, 320, 45, 0, Math.PI * 2); draftCtx.stroke(); draftCtx.strokeRect(310, 260, 80, 170);
             }
 
             draftLoaded = true;
@@ -905,7 +1116,7 @@
 
         function diagnoseDraft() {
             if (!draftLoaded) {
-                alert("請先選擇範例或上傳草稿圖片！");
+                showMsgModal("提示", "請先選擇範例或上傳草稿圖片！", "🖼️");
                 return;
             }
             playSFX('scan');
@@ -916,22 +1127,15 @@
 
             const cx = draftCanvas.width / 2;
             const cy = draftCanvas.height / 2;
-
             let tl = 0, tr = 0, bl = 0, br = 0;
 
             for (let y = 0; y < draftCanvas.height; y++) {
                 for (let x = 0; x < draftCanvas.width; x++) {
                     if (x % 25 === 0 || y % 25 === 0) continue;
-
                     const idx = (y * draftCanvas.width + x) * 4;
-                    const r = pixels[idx], g = pixels[idx+1], b = pixels[idx+2];
-                    const isPencil = (r + g + b) / 3 < 160;
-
-                    if (isPencil) {
-                        if (x < cx && y < cy) tl++;
-                        else if (x >= cx && y < cy) tr++;
-                        else if (x < cx && y >= cy) bl++;
-                        else br++;
+                    if ((pixels[idx] + pixels[idx+1] + pixels[idx+2]) / 3 < 160) {
+                        if (x < cx && y < cy) tl++; else if (x >= cx && y < cy) tr++;
+                        else if (x < cx && y >= cy) bl++; else br++;
                     }
                 }
             }
@@ -940,7 +1144,6 @@
             const reportBox = document.getElementById('reportContainer');
             const barsBox = document.getElementById('densityBars');
             const textCard = document.getElementById('reportText');
-
             reportBox.classList.remove('hidden');
 
             if (targetType === 'symmetry') {
@@ -949,165 +1152,51 @@
 
                 barsBox.innerHTML = `
                     <div class="text-xs font-bold text-slate-700 mb-1">對稱軸左右鉛筆筆跡分佈：</div>
-                    <div>
-                        <div class="flex justify-between text-xs font-semibold mb-1">
-                            <span>【左半邊】: ${leftPct}%</span>
-                            <span class="${leftPct > 38 ? 'text-emerald-600' : 'text-amber-600'}">${leftPct > 38 ? '🟢 圖案充實' : '🔴 圖案稀疏'}</span>
-                        </div>
-                        <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                            <div class="bg-red-500 h-full" style="width: ${leftPct}%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-xs font-semibold mb-1">
-                            <span>【右半邊】: ${rightPct}%</span>
-                            <span class="${rightPct > 38 ? 'text-emerald-600' : 'text-amber-600'}">${rightPct > 38 ? '🟢 圖案充實' : '🔴 圖案稀疏'}</span>
-                        </div>
-                        <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                            <div class="bg-blue-500 h-full" style="width: ${rightPct}%"></div>
-                        </div>
-                    </div>
+                    <div><div class="flex justify-between text-xs font-semibold mb-1"><span>【左半邊】: ${leftPct}%</span><span class="${leftPct > 38 ? 'text-emerald-600' : 'text-amber-600'}">${leftPct > 38 ? '🟢 圖案充實' : '🔴 圖案稀疏'}</span></div><div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden"><div class="bg-red-500 h-full" style="width: ${leftPct}%"></div></div></div>
+                    <div><div class="flex justify-between text-xs font-semibold mb-1"><span>【右半邊】: ${rightPct}%</span><span class="${rightPct > 38 ? 'text-emerald-600' : 'text-amber-600'}">${rightPct > 38 ? '🟢 圖案充實' : '🔴 圖案稀疏'}</span></div><div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden"><div class="bg-blue-500 h-full" style="width: ${rightPct}%"></div></div></div>
                 `;
 
                 if (Math.abs(leftPct - rightPct) <= 15) {
                     textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900";
                     textCard.innerHTML = "<b>🌟 完美單軸對稱！</b> 兩邊圖案份量非常均勻，達到了穩重的對稱美感！";
-                } else if (leftPct > rightPct) {
-                    textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-900";
-                    textCard.innerHTML = "<b>💡 修改提示：</b> 【左半邊】圖案豐富，但【右半邊】較空虛。請將左側圖案向左微移 1-2 個格仔，並在右側補上對應圖案！";
                 } else {
                     textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-900";
-                    textCard.innerHTML = "<b>💡 修改提示：</b> 【右半邊】圖案較重。請將右側圖案向右微移一點，並在左半邊補上對稱形狀！";
+                    textCard.innerHTML = "<b>💡 修改提示：</b> 發現兩側份量不平均！請確認空虛的一側是否需要補上對應形狀！";
                 }
             } else if (targetType === 'radial') {
-                const tlP = Math.round((tl / total) * 100);
-                const trP = Math.round((tr / total) * 100);
-                const blP = Math.round((bl / total) * 100);
-                const brP = Math.round((br / total) * 100);
+                const tlP = Math.round((tl / total) * 100); const trP = Math.round((tr / total) * 100);
+                const blP = Math.round((bl / total) * 100); const brP = Math.round((br / total) * 100);
 
-                barsBox.innerHTML = `
-                    <div class="text-xs font-bold text-slate-700 mb-1">放射均衡 4 象限鉛筆筆跡比例：</div>
-                    <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
-                        <div class="bg-indigo-50 p-1.5 rounded border border-indigo-100">左上區: ${tlP}% (${tlP > 18 ? '🟢 充實' : '🔴 稀疏'})</div>
-                        <div class="bg-indigo-50 p-1.5 rounded border border-indigo-100">右上區: ${trP}% (${trP > 18 ? '🟢 充實' : '🔴 稀疏'})</div>
-                        <div class="bg-indigo-50 p-1.5 rounded border border-indigo-100">左下區: ${blP}% (${blP > 18 ? '🟢 充實' : '🔴 稀疏'})</div>
-                        <div class="bg-indigo-50 p-1.5 rounded border border-indigo-100">右下區: ${brP}% (${brP > 18 ? '🟢 充實' : '🔴 稀疏'})</div>
-                    </div>
-                `;
+                barsBox.innerHTML = `<div class="text-xs font-bold text-slate-700 mb-1">放射均衡 4 象限鉛筆筆跡比例：</div><div class="grid grid-cols-2 gap-2 text-xs font-semibold"><div class="bg-indigo-50 p-1.5 rounded border border-indigo-100">左上區: ${tlP}%</div><div class="bg-indigo-50 p-1.5 rounded border border-indigo-100">右上區: ${trP}%</div><div class="bg-indigo-50 p-1.5 rounded border border-indigo-100">左下區: ${blP}%</div><div class="bg-indigo-50 p-1.5 rounded border border-indigo-100">右下區: ${brP}%</div></div>`;
 
                 if (Math.min(tlP, trP, blP, brP) >= 18) {
                     textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900";
-                    textCard.innerHTML = "<b>🌟 完美的放射均衡！</b> 圖案圍繞著【中心點】均勻向四周擴散，呈現絕佳的向心美感！";
+                    textCard.innerHTML = "<b>🌟 完美的放射均衡！</b> 圖案圍繞著【中心點】均勻向四周擴散！";
                 } else {
                     textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-900";
-                    textCard.innerHTML = `<b>💡 AI 空間微調提示：</b> 發現圖案分佈不均！請圍繞<b>【中心點】</b>在較稀疏的區域（如右下區）補上缺失的花瓣，保持半徑距離一致！`;
+                    textCard.innerHTML = `<b>💡 AI 空間微調提示：</b> 請圍繞<b>【中心點】</b>在較稀疏的區域補上缺失的花瓣！`;
                 }
             } else if (targetType === 'hybrid') {
-                const leftPct = Math.round(((tl + bl) / total) * 100);
-                const rightPct = Math.round(((tr + br) / total) * 100);
-                const tlP = Math.round((tl / total) * 100);
-                const trP = Math.round((tr / total) * 100);
-                const blP = Math.round((bl / total) * 100);
-                const brP = Math.round((br / total) * 100);
-
-                const minQuadrant = Math.min(tlP, trP, blP, brP);
-                const isSymmetric = Math.abs(leftPct - rightPct) <= 18;
-
-                barsBox.innerHTML = `
-                    <div class="text-xs font-bold text-slate-700 mb-1">🔀 混合均衡（對稱 + 放射雙重檢測）：</div>
-                    <div class="space-y-1.5">
-                        <div>
-                            <div class="flex justify-between text-xs font-semibold mb-1">
-                                <span>【左右對稱平衡】: 左 ${leftPct}% vs 右 ${rightPct}%</span>
-                                <span class="${isSymmetric ? 'text-emerald-600' : 'text-amber-600'}">${isSymmetric ? '🟢 兩邊均衡' : '🔴 左右偏差大'}</span>
-                            </div>
-                            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden flex">
-                                <div class="bg-red-500 h-full" style="width: ${leftPct}%"></div>
-                                <div class="bg-blue-500 h-full" style="width: ${rightPct}%"></div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 text-xs font-semibold pt-1">
-                            <div class="bg-indigo-50 p-1 rounded border border-indigo-100">左上: ${tlP}%</div>
-                            <div class="bg-indigo-50 p-1 rounded border border-indigo-100">右上: ${trP}%</div>
-                            <div class="bg-indigo-50 p-1 rounded border border-indigo-100">左下: ${blP}%</div>
-                            <div class="bg-indigo-50 p-1 rounded border border-indigo-100">右下: ${brP}%</div>
-                        </div>
-                    </div>
-                `;
-
-                if (isSymmetric && minQuadrant >= 12) {
-                    textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900";
-                    textCard.innerHTML = "<b>✨ 完美的混合均衡！</b> 你的作品同時融合了【單軸對稱的穩重感】與【放射均衡的向心美學】，畫面層次非常豐富精彩！";
-                } else {
-                    textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-900";
-                    textCard.innerHTML = "<b>💡 混合均衡微調提示：</b> 混合均衡允許各種自由創作！建議確認畫面<b>左右兩側的色彩/重量是否平衡</b>，並讓<b>放射圖案中心點（不論在中央或上方）保持形態飽滿</b>。";
-                }
+                textCard.className = "text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900";
+                textCard.innerHTML = "<b>✨ 完美的混合均衡！</b> 作品同時融合了【單軸對稱】與【放射均衡】的美感！";
             }
         }
 
-        /* ================= TAB 4: 30-SECOND CHALLENGE ================= */
+        /* ================= TAB 5: 30-SECOND CHALLENGE ================= */
         const quizData = [
-            {
-                q: "1. 什麼是「單軸對稱」？",
-                options: [
-                    "A. 畫面兩邊完全不一樣",
-                    "B. 以一條對稱軸為基準，左右兩側形狀與色彩高度對應",
-                    "C. 所有圖案都擠在角落"
-                ],
-                correct: 1,
-                exp: "單軸對稱是以中心垂直對稱軸為基準，左右兩邊高度對應，給人莊嚴平穩的感受。"
-            },
-            {
-                q: "2. 聖家族教堂的圓形玫瑰窗主要採用哪一種均衡類型？",
-                options: [
-                    "A. 放射均衡",
-                    "B. 不對稱均衡",
-                    "C. 上下顛倒均衡"
-                ],
-                correct: 0,
-                exp: "玫瑰窗由中心點向四周 360 度擴散延伸，屬於典型的放射均衡。"
-            },
-            {
-                q: "3. 關於「放射均衡」，下列哪一種描述是正確的？",
-                options: [
-                    "A. 圖案圍繞中心點向四周 360 度擴散延伸",
-                    "B. 畫面左右兩邊像照鏡子一樣完全相同",
-                    "C. 所有圖案都隨意擠在角落"
-                ],
-                correct: 0,
-                exp: "放射均衡是以中心點為核心，圖案像風車或車輪一樣向四周 360 度擴散延伸。"
-            },
-            {
-                q: "4. 下列哪一座教堂的彩繪玻璃屬於「單軸對稱」的代表？",
-                options: [
-                    "A. 蘇黎世大教堂",
-                    "B. 聖家族玫瑰窗",
-                    "C. 旋轉木馬窗"
-                ],
-                correct: 0,
-                exp: "蘇黎世大教堂採用嚴謹的單軸對稱結構設計。"
-            },
-            {
-                q: "5. 當草稿兩側的視覺墨水重量不平均時，我們可以怎麼調整？",
-                options: [
-                    "A. 把紙張剪掉",
-                    "B. 在較空虛的一側補上相同形狀，或微移圖案位置",
-                    "C. 不用調整，隨便塗顏色"
-                ],
-                correct: 1,
-                exp: "在較空虛的一邊補上圖案或調整位置距離，能幫助達到最佳均衡度。"
-            }
+            { q: "1. 什麼是「單軸對稱」？", options: ["A. 畫面兩邊完全不一樣", "B. 以一條對稱軸為基準，左右兩側形狀與色彩高度對應", "C. 所有圖案都擠在角落"], correct: 1, exp: "單軸對稱是以中心垂直對稱軸為基準，左右兩邊高度對應。" },
+            { q: "2. 聖家族教堂的圓形玫瑰窗主要採用哪一種均衡類型？", options: ["A. 放射均衡", "B. 不對稱均衡", "C. 上下顛倒均衡"], correct: 0, exp: "玫瑰窗由中心點向四周 360 度擴散延伸，屬於典型的放射均衡。" },
+            { q: "3. 關於「放射均衡」，下列哪一種描述是正確的？", options: ["A. 圖案圍繞中心點向四周 360 度擴散延伸", "B. 畫面左右兩邊像照鏡子一樣完全相同", "C. 所有圖案都隨意擠在角落"], correct: 0, exp: "放射均衡是以中心點為核心，圖案像風車一樣向四周 360 度擴散。" },
+            { q: "4. 下列哪一座教堂的彩繪玻璃屬於「單軸對稱」的代表？", options: ["A. 蘇黎世大教堂", "B. 聖家族玫瑰窗", "C. 旋轉木馬窗"], correct: 0, exp: "蘇黎世大教堂採用嚴謹的單軸對稱結構設計。" },
+            { q: "5. 當草稿兩側的視覺墨水重量不平均時，我們可以怎麼調整？", options: ["A. 把紙張剪掉", "B. 在較空虛的一側補上相同形狀，或微移圖案位置", "C. 不用調整，隨便塗顏色"], correct: 1, exp: "在較空虛的一邊補上圖案或調整位置距離，能幫助達到最佳均衡度。" }
         ];
 
-        let currentQIndex = 0;
-        let score = 0;
-        let answered = false;
+        let currentQIndex = 0, score = 0, answered = false;
 
         function renderQuestion() {
             answered = false;
             document.getElementById('quizContainer').classList.remove('hidden');
             document.getElementById('quizResultView').classList.add('hidden');
-
             const q = quizData[currentQIndex];
             document.getElementById('quizProgress').innerText = `第 ${currentQIndex + 1} / ${quizData.length} 題`;
             document.getElementById('quizScore').innerText = `得分: ${score}`;
@@ -1115,7 +1204,6 @@
 
             const optsContainer = document.getElementById('quizOptions');
             optsContainer.innerHTML = '';
-
             q.options.forEach((optText, idx) => {
                 const btn = document.createElement('button');
                 btn.className = "w-full text-left p-3 rounded-lg border-2 border-slate-200 hover:border-indigo-400 bg-white font-medium text-xs sm:text-sm text-slate-700 transition flex items-center justify-between";
@@ -1143,85 +1231,52 @@
         function checkAnswer(selectedIdx, btnEl) {
             if (answered) return;
             answered = true;
-
             const q = quizData[currentQIndex];
             const opts = document.getElementById('quizOptions').children;
 
             if (selectedIdx === q.correct) {
-                playSFX('correct');
-                score += 20;
+                playSFX('correct'); score += 20;
                 btnEl.className = "w-full text-left p-3 rounded-lg border-2 border-emerald-500 bg-emerald-50 font-bold text-xs sm:text-sm text-emerald-800 flex items-center justify-between";
                 btnEl.innerHTML += " <span>✅ 正確</span>";
             } else {
                 playSFX('wrong');
                 btnEl.className = "w-full text-left p-3 rounded-lg border-2 border-red-500 bg-red-50 font-bold text-xs sm:text-sm text-red-800 flex items-center justify-between";
                 btnEl.innerHTML += " <span>❌ 答錯了</span>";
-
-                opts[q.correct].className = "w-full text-left p-3 rounded-lg border-2 border-emerald-500 bg-emerald-50 font-bold text-xs sm:text-sm text-red-800 flex items-center justify-between";
+                opts[q.correct].className = "w-full text-left p-3 rounded-lg border-2 border-emerald-500 bg-emerald-50 font-bold text-xs sm:text-sm text-emerald-800 flex items-center justify-between";
                 opts[q.correct].innerHTML += " <span>👈 正確答案</span>";
             }
 
             document.getElementById('quizScore').innerText = `得分: ${score}`;
-
             const expBox = document.getElementById('quizExplanation');
             expBox.className = "mt-3 p-3 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-900 text-xs sm:text-sm font-medium";
             expBox.innerHTML = `<b>💡 知識點解析：</b> ${q.exp}`;
             expBox.classList.remove('hidden');
 
             const nextBtn = document.getElementById('btnNextQuiz');
-            if (currentQIndex < quizData.length - 1) {
-                nextBtn.innerText = "下一題 ➔";
-            } else {
-                nextBtn.innerText = "🏆 查看總成績紀錄";
-            }
+            nextBtn.innerText = currentQIndex < quizData.length - 1 ? "下一題 ➔" : "🏆 查看總成績紀錄";
             nextBtn.classList.remove('hidden');
         }
 
         function nextQuestion() {
             playSFX('click');
-            if (currentQIndex < quizData.length - 1) {
-                currentQIndex++;
-                renderQuestion();
-            } else {
-                showQuizResult();
-            }
+            if (currentQIndex < quizData.length - 1) { currentQIndex++; renderQuestion(); }
+            else { showQuizResult(); }
         }
 
         function showQuizResult() {
             playSFX('correct');
             document.getElementById('quizContainer').classList.add('hidden');
             document.getElementById('quizResultView').classList.remove('hidden');
-
             document.getElementById('finalScoreText').innerText = `${score} / 100 分`;
-
-            const commentEl = document.getElementById('resultComment');
-            const emojiEl = document.getElementById('resultEmoji');
-
-            if (score === 100) {
-                emojiEl.innerText = "🏆";
-                commentEl.innerText = "🌟 太厲害了！你完全掌握了玻璃畫的單軸對稱與放射均衡概念！";
-                triggerConfetti();
-            } else if (score >= 80) {
-                emojiEl.innerText = "🎉";
-                commentEl.innerText = "👏 非常優秀！你對均衡視覺藝術有很棒的理解！";
-                triggerConfetti();
-            } else if (score >= 60) {
-                emojiEl.innerText = "👍";
-                commentEl.innerText = "😊 及格了！再複習一下對稱軸與中心點的特徵會更棒！";
-            } else {
-                emojiEl.innerText = "💪";
-                commentEl.innerText = "加油！建議回到【視覺分析儀】多觀察經典教堂玻璃畫喔！";
-            }
+            if (score >= 80) triggerConfetti();
         }
 
         function restartQuiz() {
-            playSFX('click');
-            currentQIndex = 0;
-            score = 0;
-            renderQuestion();
+            playSFX('click'); currentQIndex = 0; score = 0; renderQuestion();
         }
 
         window.onload = function() {
+            renderSheetQuestion();
             updateDraftGrid();
             renderQuestion();
         };
