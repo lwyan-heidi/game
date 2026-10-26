@@ -101,18 +101,6 @@
         <p class="text-indigo-100 text-xs md:text-sm mt-1">小學四年級視覺藝術科 — 玻璃畫均衡概念探索</p>
     </header>
 
-    <!-- Modal Message Box (Replacing alert) -->
-    <div id="msgModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-        <div class="bg-white rounded-2xl p-5 max-w-sm w-full shadow-2xl border border-slate-200 text-center animate-bounce-in">
-            <div id="msgModalIcon" class="text-3xl mb-2">⚠️</div>
-            <h3 id="msgModalTitle" class="font-extrabold text-slate-800 text-base mb-2">溫馨提示</h3>
-            <p id="msgModalText" class="text-xs text-slate-600 mb-4 leading-relaxed"></p>
-            <button onclick="closeMsgModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full text-xs shadow transition">
-                明白
-            </button>
-        </div>
-    </div>
-
     <!-- Navigation Tabs -->
     <div class="max-w-4xl mx-auto mt-3 px-2">
         <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 bg-white p-1.5 rounded-xl shadow border border-slate-200">
@@ -154,7 +142,7 @@
             </div>
 
             <div class="relative w-full aspect-video max-h-[380px] bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center border-4 border-slate-800 shadow-inner mx-auto">
-                <img id="churchImage" src="1.jpg" onerror="this.onerror=null; this.src='https://placehold.co/800x450/1e1b4b/ffffff?text=%E8%98%87%E2%A5%B0%E4%B8%96%E5%A4%A7%E6%95%99%E5%A0%82+%E5%BD%A9%E7%B9%AA%E7%8E%BB%E7%90%86';" class="w-full h-full object-cover" alt="教堂玻璃窗">
+                <img id="churchImage" src="1.jpg" class="w-full h-full object-cover" alt="教堂玻璃窗">
                 <div id="scanOverlay" class="hidden absolute inset-0 bg-black/20 pointer-events-none"></div>
             </div>
 
@@ -238,7 +226,7 @@
             </div>
         </section>
 
-        <!-- ================= TAB 3: iPad 補全工作紙 (高精度形狀與方位精準比對) ================= -->
+        <!-- ================= TAB 3: iPad 補全工作紙 (新功能：形狀精準比對) ================= -->
         <section id="tab3" class="tab-content hidden bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-100">
             
             <!-- Header Task Info -->
@@ -300,7 +288,7 @@
                     恭喜！繪製非常精準！
                 </h3>
                 <p id="sheetFeedbackText" class="text-xs sm:text-sm text-emerald-800 mb-3">
-                    AI 比對結果：正確率 92%！你成功看著格仔補全了圖案！
+                    AI 比對結果：正確率 92%！你成功看著格仔補全了右邊的圖案！
                 </p>
                 <button id="btnNextSheet" onclick="switchSheetQ(2)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-full shadow transition text-xs sm:text-sm">
                     挑戰題目二：放射均衡補全 ➔
@@ -446,19 +434,6 @@
 
     <!-- JavaScript Application Logic -->
     <script>
-        /* ================= UI MODAL SYSTEM (REPLACING ALERT) ================= */
-        function showMsgModal(title, text, icon = "⚠️") {
-            document.getElementById('msgModalTitle').innerText = title;
-            document.getElementById('msgModalText').innerText = text;
-            document.getElementById('msgModalIcon').innerText = icon;
-            document.getElementById('msgModal').classList.remove('hidden');
-        }
-
-        function closeMsgModal() {
-            playSFX('click');
-            document.getElementById('msgModal').classList.add('hidden');
-        }
-
         /* ================= WEB AUDIO SFX ================= */
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
@@ -532,7 +507,6 @@
             zurich: {
                 name: "蘇黎世大教堂",
                 img: "1.jpg",
-                fallbackImg: "https://placehold.co/800x450/1e1b4b/ffffff?text=%E8%98%87%E2%A5%B0%E4%B8%96%E5%A4%A7%E6%95%99%E5%A0%82+%E5%BD%A9%E7%B9%AA%E7%8E%BB%E7%90%86",
                 type: "symmetry",
                 desc: `
                     <div class="font-bold text-amber-900 text-sm md:text-base mb-1">【單軸對稱】</div>
@@ -547,7 +521,6 @@
             matisse: {
                 name: "馬蒂斯禮拜堂",
                 img: "2.jpeg",
-                fallbackImg: "https://placehold.co/800x450/047857/ffffff?text=%E9%A6%AC%E8%92%82%E6%96%AF%E7%A6 me%E6%8B%9C%E5%A0%82+%E5%BD%A9%E7%B9%AA%E7%8E%BB%E7%90%86",
                 type: "multi-symmetry",
                 desc: `
                     <div class="font-bold text-amber-900 text-sm md:text-base mb-1">【單軸對稱（3組）】</div>
@@ -562,7 +535,6 @@
             sagrada: {
                 name: "聖家族玫瑰窗",
                 img: "3.jpeg",
-                fallbackImg: "https://placehold.co/800x450/b45309/ffffff?text=%E8%81%96%E5%AE%B6%E6%97%8F%E7%8 Rose%E7%AA%97+%E6%94%BE%E5%B0%84%E5%9D%87%E8%A1%A1",
                 type: "radial",
                 desc: `
                     <div class="font-bold text-amber-900 text-sm md:text-base mb-1">【放射均衡】</div>
@@ -580,10 +552,7 @@
             playSFX('click');
             const key = document.getElementById('churchSelect').value;
             const data = churchData[key];
-            const imgEl = document.getElementById('churchImage');
-            imgEl.onerror = () => { imgEl.src = data.fallbackImg; };
-            imgEl.src = data.img;
-
+            document.getElementById('churchImage').src = data.img;
             document.getElementById('scanOverlay').innerHTML = '';
             document.getElementById('scanOverlay').classList.add('hidden');
             document.getElementById('churchDesc').innerHTML = `
@@ -730,7 +699,7 @@
         freeCanvas.addEventListener('pointermove', (e) => { e.preventDefault(); if (isFreeDrawing) { const p = getCanvasCoords(freeCanvas, e); drawFreeSegment(freeLastX, freeLastY, p.x, p.y); freeLastX = p.x; freeLastY = p.y; } });
         freeCanvas.addEventListener('pointerup', () => { isFreeDrawing = false; });
 
-        /* ================= TAB 3: iPad 補全工作紙 (高精度形狀軌跡 + 8折放射方位 AI 批改) ================= */
+        /* ================= TAB 3: iPad 補全工作紙 (高精度形狀軌跡 AI 批改) ================= */
         const qCanvas = document.getElementById('questionCanvas');
         const qCtx = qCanvas.getContext('2d');
         const sCanvas = document.getElementById('studentCanvas');
@@ -778,39 +747,34 @@
                 qCtx.fillText("👈 請在左邊畫出對稱圖案", 30, 150);
 
             } else {
-                // 題目二：8折放射均衡網格 (灰色虛線與中心點)
-                qCtx.strokeStyle = "#94a3b8";
+                // 題目二：放射均衡 (黃色 8 折放射線與中心點)
+                qCtx.strokeStyle = "#f59e0b";
                 qCtx.lineWidth = 1.5;
                 qCtx.setLineDash([4, 4]);
                 
-                // 十字線與斜線
                 qCtx.beginPath(); qCtx.moveTo(0, 250); qCtx.lineTo(500, 250); qCtx.stroke();
                 qCtx.beginPath(); qCtx.moveTo(250, 0); qCtx.lineTo(250, 500); qCtx.stroke();
                 qCtx.beginPath(); qCtx.moveTo(0, 0); qCtx.lineTo(500, 500); qCtx.stroke();
                 qCtx.beginPath(); qCtx.moveTo(0, 500); qCtx.lineTo(500, 0); qCtx.stroke();
                 qCtx.setLineDash([]);
 
-                // 中心黑色點
-                qCtx.fillStyle = "#0f172a";
-                qCtx.beginPath(); qCtx.arc(250, 250, 7, 0, Math.PI * 2); qCtx.fill();
+                // 中心紅點
+                qCtx.fillStyle = "#ef4444";
+                qCtx.beginPath(); qCtx.arc(250, 250, 8, 0, Math.PI * 2); qCtx.fill();
+                qCtx.strokeStyle = "#ffffff"; qCtx.lineWidth = 2; qCtx.stroke();
 
-                // 預印 4 個對角花瓣 (右上、右下、左下、左上)
+                // 右上方印上 2 個花瓣題目圖案
                 qCtx.strokeStyle = "#0f172a";
-                qCtx.lineWidth = 5;
+                qCtx.lineWidth = 6;
+                drawPetalOnCtx(qCtx, 250, 250, 100, Math.PI / 4, "#0f172a");
+                drawPetalOnCtx(qCtx, 250, 250, 100, 0, "#0f172a");
 
-                drawPetalOnCtx(qCtx, 250, 250, 110, -Math.PI / 4, "#0f172a");     // 右上 (-45°)
-                drawPetalOnCtx(qCtx, 250, 250, 110, Math.PI / 4, "#0f172a");      // 右下 (45°)
-                drawPetalOnCtx(qCtx, 250, 250, 110, (3 * Math.PI) / 4, "#0f172a"); // 左下 (135°)
-                drawPetalOnCtx(qCtx, 250, 250, 110, (-3 * Math.PI) / 4, "#0f172a");// 左上 (-135°)
-
-                // 標示說明文字
                 qCtx.fillStyle = "#f59e0b";
-                qCtx.font = "bold 13px sans-serif";
+                qCtx.font = "bold 14px sans-serif";
                 qCtx.fillText("中心點", 260, 245);
                 qCtx.fillStyle = "#64748b";
-                qCtx.font = "bold 13px sans-serif";
-                qCtx.fillText("【已預印 4 個對角花瓣】", 300, 120);
-                qCtx.fillText("👈 請圍繞中心點補全上下左右 4 個方向的花瓣", 30, 480);
+                qCtx.fillText("【題目圖案】", 320, 140);
+                qCtx.fillText("👈 請圍繞中心點補全放射花瓣", 40, 140);
             }
         }
 
@@ -825,7 +789,7 @@
                 document.getElementById('sheetSub').innerText = "右邊已印有黑色圖案。請看著格仔，在左邊畫出對應的對稱圖案！";
             } else {
                 document.getElementById('sheetTitle').innerText = "📝 題目二：放射均衡補全練習";
-                document.getElementById('sheetSub').innerText = "圖中已印有 4 個對角花瓣。請圍繞【中心點】，在上下左右（正向）方向畫出其餘 4 個放射花瓣！";
+                document.getElementById('sheetSub').innerText = "右上角已印有花瓣圖案。請圍繞【中心點】，在其他方向畫出相同的放射圖案！";
             }
 
             clearSheetCanvas();
@@ -871,7 +835,7 @@
         sCanvas.addEventListener('pointermove', (e) => { e.preventDefault(); if (isStudentDrawing) { const p = getCanvasCoords(sCanvas, e); drawStudentSegment(sheetLastX, sheetLastY, p.x, p.y); sheetLastX = p.x; sheetLastY = p.y; } });
         sCanvas.addEventListener('pointerup', () => { isStudentDrawing = false; });
 
-        /* 🤖 精準 AI 批改對答案算法 (形狀軌跡 + 8折放射方位檢驗) */
+        /* 🤖 精準 AI 批改對答案算法 (形狀軌跡 + 圓周輪廓雙重檢驗) */
         function checkSheetAnswer() {
             playSFX('scan');
 
@@ -892,10 +856,11 @@
 
             if (currentSheetQ === 1) {
                 // 【題目一：單軸對稱圓形精準比對】
+                // 正確鏡像圓心 (122, 250)，半徑 R = 64
                 const targetCX = 122;
                 const targetCY = 250;
                 const targetR = 64;
-                const tolerance = 18;
+                const tolerance = 18; // 手繪輪廓允許誤差 (px)
 
                 for (let y = 0; y < sCanvas.height; y++) {
                     for (let x = 0; x < sCanvas.width; x++) {
@@ -906,6 +871,7 @@
                             const dy = y - targetCY;
                             const dist = Math.sqrt(dx * dx + dy * dy);
 
+                            // 檢測是否落於圓形輪廓軌跡上
                             if (Math.abs(dist - targetR) <= tolerance) {
                                 validTargetPixels++;
                                 let angle = Math.atan2(dy, dx);
@@ -920,22 +886,23 @@
                 if (totalStudentPixels < 80) {
                     playSFX('wrong');
                     feedbackCard.classList.add('hidden');
-                    showMsgModal("尚未完成作答", "請先看著格仔，用畫筆在左邊畫出對應的圓形圖案再點擊對答案喔！", "✏️");
+                    alert("請先看著格仔，用畫筆在左邊畫出對應的圓形圖案再點擊對答案喔！");
                     return;
                 }
 
-                const precision = validTargetPixels / totalStudentPixels;
+                const precision = validTargetPixels / totalStudentPixels; // 形狀命中率
                 const coveredOctants = octantHits.filter(count => count > 5).length;
-                const coverage = coveredOctants / 8;
+                const coverage = coveredOctants / 8; // 圓弧完整覆蓋率
+
                 const finalScore = Math.round(precision * coverage * 100);
 
-                if (precision >= 0.60 && coverage >= 0.60) {
+                if (precision >= 0.65 && coverage >= 0.65) {
                     playSFX('correct');
                     triggerConfetti();
                     feedbackCard.className = "mt-4 p-4 rounded-xl bg-emerald-50 border-2 border-emerald-300 transition-all text-center";
                     emojiEl.innerText = "🎉";
                     titleEl.innerText = "🌟 題目一批改：完美單軸對稱！";
-                    textEl.innerHTML = `<b>對稱精準度：${Math.max(finalScore, 85)}%！</b> 你精準看懂了格仔數量，在左側完美畫出了圓形鏡像！`;
+                    textEl.innerHTML = `<b>對稱精準度：${Math.max(finalScore, 82)}%！</b> 你精準看懂了格仔數量，在左側完美畫出了圓形鏡像！`;
                     btnEl.innerText = "進入題目二：放射均衡補全 ➔";
                     btnEl.onclick = () => switchSheetQ(2);
                 } else {
@@ -954,7 +921,7 @@
                 }
 
             } else {
-                // 【題目二：4 正向放射花瓣精準比對】
+                // 【題目二：放射均衡花瓣精準比對】
                 const targetCX = 250;
                 const targetCY = 250;
                 let validRadialPixels = 0;
@@ -969,10 +936,9 @@
                             const dy = y - targetCY;
                             const dist = Math.sqrt(dx * dx + dy * dy);
 
-                            if (dist >= 20 && dist <= 140) {
+                            if (dist >= 20 && dist <= 130) {
                                 let angle = Math.atan2(dy, dx);
                                 if (angle < 0) angle += Math.PI * 2;
-                                // Sector 0: Right, Sector 1: Down-Right, Sector 2: Down, Sector 3: Down-Left, Sector 4: Left, Sector 5: Up-Left, Sector 6: Up, Sector 7: Up-Right
                                 const sector = Math.floor(((angle + Math.PI / 8) % (Math.PI * 2)) / (Math.PI / 4));
                                 angleSectorHits[sector]++;
                                 validRadialPixels++;
@@ -984,30 +950,28 @@
                 if (totalStudentPixels < 80) {
                     playSFX('wrong');
                     feedbackCard.classList.add('hidden');
-                    showMsgModal("尚未完成作答", "請先圍繞中心點畫出上下左右方向的花瓣再點擊對答案喔！", "🌸");
+                    alert("請先圍繞中心點畫出放射花瓣再點擊對答案喔！");
                     return;
                 }
 
-                // 檢查學生是否補全了 0, 2, 4, 6（右、下、左、上）這 4 個缺失的正向扇區
-                const requiredSectors = [0, 2, 4, 6];
-                const coveredRequiredSectors = requiredSectors.filter(sec => angleSectorHits[sec] > 15).length;
+                const newSectorsCovered = angleSectorHits.slice(2, 8).filter(count => count > 15).length;
                 const precision = validRadialPixels / totalStudentPixels;
 
-                if (coveredRequiredSectors >= 3 && precision >= 0.50) {
+                if (newSectorsCovered >= 4 && precision >= 0.6) {
                     playSFX('correct');
                     triggerConfetti();
                     feedbackCard.className = "mt-4 p-4 rounded-xl bg-emerald-50 border-2 border-emerald-300 transition-all text-center";
                     emojiEl.innerText = "🏆";
                     titleEl.innerText = "✨ 恭喜完成全部 iPad 補全工作紙！";
-                    textEl.innerHTML = `<b>放射正確率：${Math.round((coveredRequiredSectors / 4) * 100)}%！</b> 你成功圍繞中心點補全了剩餘 4 個正向（上下左右）的花瓣！`;
+                    textEl.innerHTML = `<b>放射正確率：${Math.round((newSectorsCovered / 6) * 100)}%！</b> 你成功圍繞中心點補全了所有方向的放射花瓣！`;
                     btnEl.innerText = "🔄 重新練習題目一";
                     btnEl.onclick = () => switchSheetQ(1);
                 } else {
                     playSFX('wrong');
                     feedbackCard.className = "mt-4 p-4 rounded-xl bg-red-50 border-2 border-red-300 transition-all text-center";
                     emojiEl.innerText = "❌";
-                    titleEl.innerText = "批改不通過：放射花瓣未齊全";
-                    textEl.innerHTML = "<b>放射正確率未達標！</b> 請圍繞<b>【中心點】</b>在正上、正下、正左、正右 4 個方向都畫上對應的花瓣喔！";
+                    titleEl.innerText = "批改不通過：放射圖案未補全";
+                    textEl.innerHTML = "<b>放射正確率未達標！</b> 請圍繞<b>【中心點】</b>向左、向下等各個方向都畫上對應的花瓣喔！";
                     btnEl.innerText = "🗑️ 清除重畫此題";
                     btnEl.onclick = () => clearSheetCanvas();
                 }
@@ -1049,12 +1013,12 @@
             targetCtx.lineWidth = 4;
             targetCtx.beginPath();
             targetCtx.moveTo(0, 0);
-            targetCtx.quadraticCurveTo(24, radius / 2, 0, radius);
-            targetCtx.quadraticCurveTo(-24, radius / 2, 0, 0);
+            targetCtx.quadraticCurveTo(20, radius / 2, 0, radius);
+            targetCtx.quadraticCurveTo(-20, radius / 2, 0, 0);
             targetCtx.stroke();
             targetCtx.fillStyle = color;
             targetCtx.beginPath();
-            targetCtx.arc(0, radius + 8, 4, 0, Math.PI * 2);
+            targetCtx.arc(0, radius + 10, 5, 0, Math.PI * 2);
             targetCtx.fill();
             targetCtx.restore();
         }
@@ -1115,10 +1079,7 @@
         }
 
         function diagnoseDraft() {
-            if (!draftLoaded) {
-                showMsgModal("提示", "請先選擇範例或上傳草稿圖片！", "🖼️");
-                return;
-            }
+            if (!draftLoaded) { alert("請先選擇範例或上傳草稿圖片！"); return; }
             playSFX('scan');
 
             const targetType = document.querySelector('input[name="targetType"]:checked').value;
@@ -1242,7 +1203,7 @@
                 playSFX('wrong');
                 btnEl.className = "w-full text-left p-3 rounded-lg border-2 border-red-500 bg-red-50 font-bold text-xs sm:text-sm text-red-800 flex items-center justify-between";
                 btnEl.innerHTML += " <span>❌ 答錯了</span>";
-                opts[q.correct].className = "w-full text-left p-3 rounded-lg border-2 border-emerald-500 bg-emerald-50 font-bold text-xs sm:text-sm text-emerald-800 flex items-center justify-between";
+                opts[q.correct].className = "w-full text-left p-3 rounded-lg border-2 border-emerald-500 bg-emerald-50 font-bold text-xs sm:text-sm text-red-800 flex items-center justify-between";
                 opts[q.correct].innerHTML += " <span>👈 正確答案</span>";
             }
 
