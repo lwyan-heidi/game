@@ -226,7 +226,7 @@
             </div>
         </section>
 
-        <!-- ================= TAB 3: iPad 補全工作紙 (新功能：形狀精準比對) ================= -->
+        <!-- ================= TAB 3: iPad 補全工作紙 ================= -->
         <section id="tab3" class="tab-content hidden bg-white rounded-2xl p-4 md:p-6 shadow-md border border-slate-100">
             
             <!-- Header Task Info -->
@@ -699,7 +699,7 @@
         freeCanvas.addEventListener('pointermove', (e) => { e.preventDefault(); if (isFreeDrawing) { const p = getCanvasCoords(freeCanvas, e); drawFreeSegment(freeLastX, freeLastY, p.x, p.y); freeLastX = p.x; freeLastY = p.y; } });
         freeCanvas.addEventListener('pointerup', () => { isFreeDrawing = false; });
 
-        /* ================= TAB 3: iPad 補全工作紙 (高精度形狀軌跡 AI 批改) ================= */
+        /* ================= TAB 3: iPad 補全工作紙 ================= */
         const qCanvas = document.getElementById('questionCanvas');
         const qCtx = qCanvas.getContext('2d');
         const sCanvas = document.getElementById('studentCanvas');
@@ -751,7 +751,7 @@
                 qCtx.strokeStyle = "#f59e0b";
                 qCtx.lineWidth = 1.5;
                 qCtx.setLineDash([4, 4]);
-                
+
                 qCtx.beginPath(); qCtx.moveTo(0, 250); qCtx.lineTo(500, 250); qCtx.stroke();
                 qCtx.beginPath(); qCtx.moveTo(250, 0); qCtx.lineTo(250, 500); qCtx.stroke();
                 qCtx.beginPath(); qCtx.moveTo(0, 0); qCtx.lineTo(500, 500); qCtx.stroke();
@@ -763,18 +763,21 @@
                 qCtx.beginPath(); qCtx.arc(250, 250, 8, 0, Math.PI * 2); qCtx.fill();
                 qCtx.strokeStyle = "#ffffff"; qCtx.lineWidth = 2; qCtx.stroke();
 
-                // 右上方印上 2 個花瓣題目圖案
+                // 預印 4 個對角花瓣題目圖案 (西北、東北、西南、東南)
                 qCtx.strokeStyle = "#0f172a";
                 qCtx.lineWidth = 6;
-                drawPetalOnCtx(qCtx, 250, 250, 100, Math.PI / 4, "#0f172a");
-                drawPetalOnCtx(qCtx, 250, 250, 100, 0, "#0f172a");
+                const diagAngles = [Math.PI / 4, (3 * Math.PI) / 4, (5 * Math.PI) / 4, (7 * Math.PI) / 4];
+                diagAngles.forEach(angle => {
+                    drawPetalOnCtx(qCtx, 250, 250, 100, angle, "#0f172a");
+                });
 
+                // 標示說明文字
                 qCtx.fillStyle = "#f59e0b";
                 qCtx.font = "bold 14px sans-serif";
                 qCtx.fillText("中心點", 260, 245);
                 qCtx.fillStyle = "#64748b";
-                qCtx.fillText("【題目圖案】", 320, 140);
-                qCtx.fillText("👈 請圍繞中心點補全放射花瓣", 40, 140);
+                qCtx.fillText("【已預印 4 個對角花瓣】", 290, 130);
+                qCtx.fillText("👈 請圍繞中心點補上下左右 4 個方向的花瓣", 50, 410);
             }
         }
 
@@ -789,7 +792,7 @@
                 document.getElementById('sheetSub').innerText = "右邊已印有黑色圖案。請看著格仔，在左邊畫出對應的對稱圖案！";
             } else {
                 document.getElementById('sheetTitle').innerText = "📝 題目二：放射均衡補全練習";
-                document.getElementById('sheetSub').innerText = "右上角已印有花瓣圖案。請圍繞【中心點】，在其他方向畫出相同的放射圖案！";
+                document.getElementById('sheetSub').innerText = "圖中已印有 4 個對角花瓣。請圍繞【中心點】，在上下左右（正向）方向畫出其餘 4 個放射花瓣！";
             }
 
             clearSheetCanvas();
@@ -856,11 +859,10 @@
 
             if (currentSheetQ === 1) {
                 // 【題目一：單軸對稱圓形精準比對】
-                // 正確鏡像圓心 (122, 250)，半徑 R = 64
                 const targetCX = 122;
                 const targetCY = 250;
                 const targetR = 64;
-                const tolerance = 18; // 手繪輪廓允許誤差 (px)
+                const tolerance = 18;
 
                 for (let y = 0; y < sCanvas.height; y++) {
                     for (let x = 0; x < sCanvas.width; x++) {
@@ -871,7 +873,6 @@
                             const dy = y - targetCY;
                             const dist = Math.sqrt(dx * dx + dy * dy);
 
-                            // 檢測是否落於圓形輪廓軌跡上
                             if (Math.abs(dist - targetR) <= tolerance) {
                                 validTargetPixels++;
                                 let angle = Math.atan2(dy, dx);
@@ -890,9 +891,9 @@
                     return;
                 }
 
-                const precision = validTargetPixels / totalStudentPixels; // 形狀命中率
+                const precision = validTargetPixels / totalStudentPixels;
                 const coveredOctants = octantHits.filter(count => count > 5).length;
-                const coverage = coveredOctants / 8; // 圓弧完整覆蓋率
+                const coverage = coveredOctants / 8;
 
                 const finalScore = Math.round(precision * coverage * 100);
 
@@ -950,28 +951,29 @@
                 if (totalStudentPixels < 80) {
                     playSFX('wrong');
                     feedbackCard.classList.add('hidden');
-                    alert("請先圍繞中心點畫出放射花瓣再點擊對答案喔！");
+                    alert("請先圍繞中心點畫出上下左右 4 個方向的花瓣再點擊對答案喔！");
                     return;
                 }
 
-                const newSectorsCovered = angleSectorHits.slice(2, 8).filter(count => count > 15).length;
+                const cardinalSectors = [0, 2, 4, 6];
+                const cardinalHits = cardinalSectors.filter(sec => angleSectorHits[sec] > 15).length;
                 const precision = validRadialPixels / totalStudentPixels;
 
-                if (newSectorsCovered >= 4 && precision >= 0.6) {
+                if (cardinalHits >= 3 && precision >= 0.6) {
                     playSFX('correct');
                     triggerConfetti();
                     feedbackCard.className = "mt-4 p-4 rounded-xl bg-emerald-50 border-2 border-emerald-300 transition-all text-center";
                     emojiEl.innerText = "🏆";
                     titleEl.innerText = "✨ 恭喜完成全部 iPad 補全工作紙！";
-                    textEl.innerHTML = `<b>放射正確率：${Math.round((newSectorsCovered / 6) * 100)}%！</b> 你成功圍繞中心點補全了所有方向的放射花瓣！`;
+                    textEl.innerHTML = `<b>放射正確率：${Math.round((cardinalHits / 4) * 100)}%！</b> 你成功圍繞中心點補全了上下左右 4 個方向的放射花瓣！`;
                     btnEl.innerText = "🔄 重新練習題目一";
                     btnEl.onclick = () => switchSheetQ(1);
                 } else {
                     playSFX('wrong');
                     feedbackCard.className = "mt-4 p-4 rounded-xl bg-red-50 border-2 border-red-300 transition-all text-center";
                     emojiEl.innerText = "❌";
-                    titleEl.innerText = "批改不通過：放射圖案未補全";
-                    textEl.innerHTML = "<b>放射正確率未達標！</b> 請圍繞<b>【中心點】</b>向左、向下等各個方向都畫上對應的花瓣喔！";
+                    titleEl.innerText = "批改不通過：正向花瓣未補全";
+                    textEl.innerHTML = "<b>放射正確率未達標！</b> 請圍繞<b>【中心點】</b>在上、下、左、右（正向）4 個方向都畫上對應的花瓣喔！";
                     btnEl.innerText = "🗑️ 清除重畫此題";
                     btnEl.onclick = () => clearSheetCanvas();
                 }
